@@ -30,8 +30,9 @@
         routerLink="/dashboard"
         routerLinkActive="active"
         *ngIf="(currentUser$ | async)?.role === 'Admin'"
-        >Dashboard</a
       >
+        Dashboard
+      </a>
     </nav>
 
     <div class="user-menu">
