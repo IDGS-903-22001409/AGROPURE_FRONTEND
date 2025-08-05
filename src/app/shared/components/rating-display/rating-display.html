@@ -1,1 +1,9 @@
-<p>rating-display works!</p>
+<div class="rating-display">
+  <mat-icon
+    *ngFor="let star of stars"
+    [class]="star.filled ? 'star-filled' : 'star-empty'"
+  >
+    {{ star.filled ? "star" : "star_border" }}
+  </mat-icon>
+  <span class="rating-value" *ngIf="showValue">({{ rating }}/5)</span>
+</div>

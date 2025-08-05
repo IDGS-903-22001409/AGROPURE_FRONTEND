@@ -1,1 +1,84 @@
-<p>supplier-list works!</p>
+<div class="supplier-list-container">
+  <div class="list-header">
+    <h1>Gestión de Proveedores</h1>
+    <p>Administra la información de proveedores</p>
+    <button mat-raised-button color="primary">
+      <mat-icon>add</mat-icon>
+      Nuevo Proveedor
+    </button>
+  </div>
+
+  <mat-card *ngIf="suppliers.length > 0; else noSuppliers">
+    <mat-card-content>
+      <table mat-table [dataSource]="suppliers" class="suppliers-table">
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef>ID</th>
+          <td mat-cell *matCellDef="let supplier">{{ supplier.id }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef>Empresa</th>
+          <td mat-cell *matCellDef="let supplier">{{ supplier.name }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="contact">
+          <th mat-header-cell *matHeaderCellDef>Contacto</th>
+          <td mat-cell *matCellDef="let supplier">
+            <div>
+              <strong>{{ supplier.contactPerson }}</strong
+              ><br />
+              <small>{{ supplier.email }}</small
+              ><br />
+              <small>{{ supplier.phone }}</small>
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="address">
+          <th mat-header-cell *matHeaderCellDef>Dirección</th>
+          <td mat-cell *matCellDef="let supplier">{{ supplier.address }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>Estado</th>
+          <td mat-cell *matCellDef="let supplier">
+            <mat-chip [color]="supplier.isActive ? 'primary' : 'warn'" selected>
+              {{ supplier.isActive ? "Activo" : "Inactivo" }}
+            </mat-chip>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Acciones</th>
+          <td mat-cell *matCellDef="let supplier">
+            <button mat-icon-button color="primary">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button
+              mat-icon-button
+              color="warn"
+              (click)="deleteSupplier(supplier)"
+            >
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+    </mat-card-content>
+  </mat-card>
+
+  <ng-template #noSuppliers>
+    <mat-card>
+      <mat-card-content>
+        <div class="no-suppliers">
+          <mat-icon>local_shipping</mat-icon>
+          <h2>No hay proveedores registrados</h2>
+          <p>Agrega proveedores para gestionar el suministro de materiales.</p>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </ng-template>
+</div>

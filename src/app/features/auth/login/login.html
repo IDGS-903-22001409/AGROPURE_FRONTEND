@@ -1,1 +1,90 @@
-<p>login works!</p>
+<div class="login-container">
+  <mat-card class="login-card">
+    <mat-card-header>
+      <div class="header-content">
+        <mat-icon class="login-icon">water_drop</mat-icon>
+        <mat-card-title>AGROPURE</mat-card-title>
+        <mat-card-subtitle>Sistema de Monitoreo de Agua</mat-card-subtitle>
+      </div>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Email</mat-label>
+          <input matInput type="email" formControlName="email" required />
+          <mat-icon matSuffix>email</mat-icon>
+          <mat-error *ngIf="loginForm.get('email')?.hasError('required')">
+            El email es requerido
+          </mat-error>
+          <mat-error *ngIf="loginForm.get('email')?.hasError('email')">
+            Ingresa un email válido
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Contraseña</mat-label>
+          <input
+            matInput
+            [type]="hidePassword ? 'password' : 'text'"
+            formControlName="password"
+            required
+          />
+          <button
+            mat-icon-button
+            matSuffix
+            (click)="hidePassword = !hidePassword"
+            type="button"
+          >
+            <mat-icon>{{
+              hidePassword ? "visibility_off" : "visibility"
+            }}</mat-icon>
+          </button>
+          <mat-error *ngIf="loginForm.get('password')?.hasError('required')">
+            La contraseña es requerida
+          </mat-error>
+        </mat-form-field>
+
+        <button
+          mat-raised-button
+          color="primary"
+          type="submit"
+          class="full-width login-button"
+          [disabled]="loginForm.invalid || isLoading"
+        >
+          {{ isLoading ? "Iniciando sesión..." : "Iniciar Sesión" }}
+        </button>
+      </form>
+
+      <div class="demo-credentials">
+        <h4>Credenciales de Demo:</h4>
+        <div class="credential-item">
+          <strong>Admin:</strong> adminagropure.com / admin123
+          <button
+            mat-stroked-button
+            (click)="fillCredentials('admin')"
+            class="demo-btn"
+          >
+            Usar
+          </button>
+        </div>
+        <div class="credential-item">
+          <strong>Cliente:</strong> juanexample.com / customer123
+          <button
+            mat-stroked-button
+            (click)="fillCredentials('customer')"
+            class="demo-btn"
+          >
+            Usar
+          </button>
+        </div>
+      </div>
+    </mat-card-content>
+
+    <mat-card-actions>
+      <p class="register-link">
+        ¿No tienes cuenta? <a routerLink="/register">Regístrate aquí</a>
+      </p>
+    </mat-card-actions>
+  </mat-card>
+</div>

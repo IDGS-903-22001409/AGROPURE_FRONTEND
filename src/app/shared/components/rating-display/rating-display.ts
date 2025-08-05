@@ -6,42 +6,8 @@ import { MatIconModule } from '@angular/material/icon';
   selector: 'app-rating-display',
   standalone: true,
   imports: [CommonModule, MatIconModule],
-  template: `
-    <div class="rating-display">
-      <mat-icon
-        *ngFor="let star of stars"
-        [class]="star.filled ? 'star-filled' : 'star-empty'"
-      >
-        {{ star.filled ? 'star' : 'star_border' }}
-      </mat-icon>
-      <span class="rating-value" *ngIf="showValue">({{ rating }}/5)</span>
-    </div>
-  `,
-  styles: [
-    `
-      .rating-display {
-        display: flex;
-        align-items: center;
-        gap: 2px;
-      }
-      .star-filled {
-        color: #ffc107;
-      }
-      .star-empty {
-        color: #e0e0e0;
-      }
-      .rating-value {
-        margin-left: 8px;
-        font-size: 0.9rem;
-        color: #666;
-      }
-      mat-icon {
-        font-size: 16px;
-        height: 16px;
-        width: 16px;
-      }
-    `,
-  ],
+  templateUrl: './rating-display.html',
+  styleUrls: ['./rating-display.scss'],
 })
 export class RatingDisplayComponent {
   @Input() rating: number = 0;

@@ -1,1 +1,100 @@
-<p>user-list works!</p>
+<div class="user-list-container">
+  <div class="list-header">
+    <h1>Gestión de Usuarios</h1>
+    <p>Administra todos los usuarios del sistema</p>
+  </div>
+
+  <mat-card *ngIf="users.length > 0; else noUsers">
+    <mat-card-content>
+      <table mat-table [dataSource]="users" class="users-table">
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef>ID</th>
+          <td mat-cell *matCellDef="let user">{{ user.id }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef>Nombre</th>
+          <td mat-cell *matCellDef="let user">
+            {{ user.firstName }} {{ user.lastName }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="email">
+          <th mat-header-cell *matHeaderCellDef>Email</th>
+          <td mat-cell *matCellDef="let user">{{ user.email }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="role">
+          <th mat-header-cell *matHeaderCellDef>Rol</th>
+          <td mat-cell *matCellDef="let user">
+            <mat-chip
+              [color]="user.role === 'Admin' ? 'primary' : 'accent'"
+              selected
+            >
+              {{ user.role === "Admin" ? "Administrador" : "Cliente" }}
+            </mat-chip>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>Estado</th>
+          <td mat-cell *matCellDef="let user">
+            <mat-chip [color]="user.isActive ? 'primary' : 'warn'" selected>
+              {{ user.isActive ? "Activo" : "Inactivo" }}
+            </mat-chip>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="createdAt">
+          <th mat-header-cell *matHeaderCellDef>Registro</th>
+          <td mat-cell *matCellDef="let user">
+            {{ user.createdAt | date : "dd/MM/yyyy" }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Acciones</th>
+          <td mat-cell *matCellDef="let user">
+            <button
+              mat-icon-button
+              [color]="user.isActive ? 'warn' : 'primary'"
+              (click)="toggleUserStatus(user)"
+              [title]="user.isActive ? 'Desactivar usuario' : 'Activar usuario'"
+            >
+              <mat-icon>{{
+                user.isActive ? "block" : "check_circle"
+              }}</mat-icon>
+            </button>
+            <button
+              mat-icon-button
+              color="warn"
+              (click)="deleteUser(user)"
+              title="Eliminar usuario"
+            >
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr
+          mat-row
+          *matRowDef="let row; columns: displayedColumns"
+          [class]="!row.isActive ? 'inactive-row' : ''"
+        ></tr>
+      </table>
+    </mat-card-content>
+  </mat-card>
+
+  <ng-template #noUsers>
+    <mat-card>
+      <mat-card-content>
+        <div class="no-users">
+          <mat-icon>people</mat-icon>
+          <h2>No hay usuarios registrados</h2>
+          <p>Los usuarios aparecerán aquí cuando se registren en el sistema.</p>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </ng-template>
+</div>

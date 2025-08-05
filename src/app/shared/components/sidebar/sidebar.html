@@ -1,1 +1,52 @@
-<p>sidebar works!</p>
+<nav class="sidebar">
+  <mat-nav-list>
+    <h3 matSubheader>Panel de Administración</h3>
+
+    <a mat-list-item routerLink="/dashboard" routerLinkActive="active">
+      <mat-icon matListIcon>dashboard</mat-icon>
+      <span matListItemTitle>Dashboard</span>
+    </a>
+
+    <a mat-list-item routerLink="/admin/users" routerLinkActive="active">
+      <mat-icon matListIcon>people</mat-icon>
+      <span matListItemTitle>Usuarios</span>
+    </a>
+
+    <a mat-list-item routerLink="/products" routerLinkActive="active">
+      <mat-icon matListIcon>inventory</mat-icon>
+      <span matListItemTitle>Productos</span>
+    </a>
+
+    <a mat-list-item routerLink="/admin/quotes" routerLinkActive="active">
+      <mat-icon matListIcon>assignment</mat-icon>
+      <span matListItemTitle>Cotizaciones</span>
+    </a>
+
+    <a mat-list-item routerLink="/admin/materials" routerLinkActive="active">
+      <mat-icon matListIcon>build</mat-icon>
+      <span matListItemTitle>Materiales</span>
+    </a>
+
+    <a mat-list-item routerLink="/admin/suppliers" routerLinkActive="active">
+      <mat-icon matListIcon>local_shipping</mat-icon>
+      <span matListItemTitle>Proveedores</span>
+    </a>
+
+    <a mat-list-item routerLink="/admin/reviews" routerLinkActive="active">
+      <mat-icon matListIcon>reviews</mat-icon>
+      <span matListItemTitle>Reseñas</span>
+    </a>
+
+    <mat-divider></mat-divider>
+
+    <a
+      mat-list-item
+      routerLink="/"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: true }"
+    >
+      <mat-icon matListIcon>home</mat-icon>
+      <span matListItemTitle>Volver al Sitio</span>
+    </a>
+  </mat-nav-list>
+</nav>

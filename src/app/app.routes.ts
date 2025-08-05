@@ -1,10 +1,10 @@
 import { Routes } from '@angular/router';
-import { MainLayoutComponent } from './layouts/main-layout/main-layout.component';
-import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component';
-import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
-import { authGuard } from './core/guards/auth.guard';
-import { adminGuard } from './core/guards/admin.guard';
-import { guestGuard } from './core/guards/guest.guard';
+import { MainLayoutComponent } from './layouts/main-layout/main-layout';
+import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout';
+import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout';
+import { authGuard } from './core/guards/auth';
+import { adminGuard } from './core/guards/admin';
+import { guestGuard } from './core/guards/guest';
 
 export const routes: Routes = [
   {
@@ -14,27 +14,27 @@ export const routes: Routes = [
       {
         path: '',
         loadComponent: () =>
-          import('./features/home/home.component').then((m) => m.HomeComponent),
+          import('./features/home/home').then((m) => m.HomeComponent),
       },
       {
         path: 'products',
         loadComponent: () =>
-          import(
-            './features/products/product-list/product-list.component'
-          ).then((m) => m.ProductListComponent),
+          import('./features/products/product-list/product-list').then(
+            (m) => m.ProductListComponent
+          ),
       },
       {
         path: 'products/:id',
         loadComponent: () =>
-          import(
-            './features/products/product-detail/product-detail.component'
-          ).then((m) => m.ProductDetailComponent),
+          import('./features/products/product-detail/product-detail').then(
+            (m) => m.ProductDetailComponent
+          ),
       },
       {
         path: 'quotes',
         canActivate: [authGuard],
         loadComponent: () =>
-          import('./features/quotes/quote-form/quote-form.component').then(
+          import('./features/quotes/quote-form/quote-form').then(
             (m) => m.QuoteFormComponent
           ),
       },
@@ -42,9 +42,7 @@ export const routes: Routes = [
         path: 'profile',
         canActivate: [authGuard],
         loadComponent: () =>
-          import('./features/profile/profile.component').then(
-            (m) => m.ProfileComponent
-          ),
+          import('./features/profile/profile').then((m) => m.ProfileComponent),
       },
     ],
   },
@@ -56,15 +54,13 @@ export const routes: Routes = [
         path: 'login',
         canActivate: [guestGuard],
         loadComponent: () =>
-          import('./features/auth/login/login.component').then(
-            (m) => m.LoginComponent
-          ),
+          import('./features/auth/login/login').then((m) => m.LoginComponent),
       },
       {
         path: 'register',
         canActivate: [guestGuard],
         loadComponent: () =>
-          import('./features/auth/register/register.component').then(
+          import('./features/auth/register/register').then(
             (m) => m.RegisterComponent
           ),
       },
@@ -86,7 +82,7 @@ export const routes: Routes = [
       {
         path: '',
         loadComponent: () =>
-          import('./features/dashboard/dashboard.component').then(
+          import('./features/dashboard/dashboard').then(
             (m) => m.DashboardComponent
           ),
       },
@@ -100,28 +96,35 @@ export const routes: Routes = [
       {
         path: 'users',
         loadComponent: () =>
-          import('./features/admin/user-list/user-list.component').then(
+          import('./features/admin/user-list/user-list').then(
             (m) => m.UserListComponent
+          ),
+      },
+      {
+        path: 'quotes',
+        loadComponent: () =>
+          import('./features/quotes/quote-list/quote-list').then(
+            (m) => m.QuoteListComponent
           ),
       },
       {
         path: 'suppliers',
         loadComponent: () =>
-          import('./features/admin/supplier-list/supplier-list.component').then(
+          import('./features/admin/supplier-list/supplier-list').then(
             (m) => m.SupplierListComponent
           ),
       },
       {
         path: 'materials',
         loadComponent: () =>
-          import('./features/admin/material-list/material-list.component').then(
+          import('./features/admin/material-list/material-list').then(
             (m) => m.MaterialListComponent
           ),
       },
       {
         path: 'reviews',
         loadComponent: () =>
-          import('./features/admin/review-list/review-list.component').then(
+          import('./features/admin/review-list/review-list').then(
             (m) => m.ReviewListComponent
           ),
       },
@@ -135,7 +138,7 @@ export const routes: Routes = [
       {
         path: 'quotes',
         loadComponent: () =>
-          import('./features/quotes/my-quotes/my-quotes.component').then(
+          import('./features/quotes/my-quotes/my-quotes').then(
             (m) => m.MyQuotesComponent
           ),
       },
@@ -144,8 +147,6 @@ export const routes: Routes = [
   {
     path: '**',
     loadComponent: () =>
-      import('./features/not-found/not-found.component').then(
-        (m) => m.NotFoundComponent
-      ),
+      import('./features/not-found/not-found').then((m) => m.NotFoundComponent),
   },
 ];

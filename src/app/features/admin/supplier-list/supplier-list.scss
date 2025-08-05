@@ -1,0 +1,41 @@
+.supplier-list-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+  gap: 16px;
+
+  h1 {
+    color: #2e7d32;
+    margin: 0;
+  }
+}
+
+.suppliers-table {
+  width: 100%;
+}
+
+.no-suppliers {
+  text-align: center;
+  padding: 64px 32px;
+
+  mat-icon {
+    font-size: 64px;
+    height: 64px;
+    width: 64px;
+    color: #ccc;
+    margin-bottom: 24px;
+  }
+
+  h2 {
+    color: #666;
+    margin-bottom: 16px;
+  }
+}

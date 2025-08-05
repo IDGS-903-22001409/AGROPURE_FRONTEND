@@ -1,1 +1,86 @@
-<p>material-list works!</p>
+<div class="material-list-container">
+  <div class="list-header">
+    <h1>Gestión de Materiales</h1>
+    <p>Administra el inventario de materiales</p>
+    <button mat-raised-button color="primary">
+      <mat-icon>add</mat-icon>
+      Nuevo Material
+    </button>
+  </div>
+
+  <mat-card *ngIf="materials.length > 0; else noMaterials">
+    <mat-card-content>
+      <table mat-table [dataSource]="materials" class="materials-table">
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef>ID</th>
+          <td mat-cell *matCellDef="let material">{{ material.id }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef>Material</th>
+          <td mat-cell *matCellDef="let material">
+            <div>
+              <strong>{{ material.name }}</strong
+              ><br />
+              <small>{{ material.description }}</small>
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="cost">
+          <th mat-header-cell *matHeaderCellDef>Costo</th>
+          <td mat-cell *matCellDef="let material">
+            ${{ material.unitCost | number : "1.2-2" }} / {{ material.unit }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="supplier">
+          <th mat-header-cell *matHeaderCellDef>Proveedor</th>
+          <td mat-cell *matCellDef="let material">
+            {{ material.supplierName }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>Estado</th>
+          <td mat-cell *matCellDef="let material">
+            <mat-chip [color]="material.isActive ? 'primary' : 'warn'" selected>
+              {{ material.isActive ? "Disponible" : "No Disponible" }}
+            </mat-chip>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Acciones</th>
+          <td mat-cell *matCellDef="let material">
+            <button mat-icon-button color="primary">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button
+              mat-icon-button
+              color="warn"
+              (click)="deleteMaterial(material)"
+            >
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+    </mat-card-content>
+  </mat-card>
+
+  <ng-template #noMaterials>
+    <mat-card>
+      <mat-card-content>
+        <div class="no-materials">
+          <mat-icon>build</mat-icon>
+          <h2>No hay materiales registrados</h2>
+          <p>Agrega materiales para crear productos del sistema.</p>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </ng-template>
+</div>

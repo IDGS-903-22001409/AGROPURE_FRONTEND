@@ -1,1 +1,155 @@
-<p>product-detail works!</p>
+<div class="product-detail-container" *ngIf="product">
+  <div class="breadcrumb">
+    <a routerLink="/products">Productos</a>
+    <mat-icon>chevron_right</mat-icon>
+    <span>{{ product.name }}</span>
+  </div>
+
+  <div class="product-header">
+    <div class="product-image">
+      <mat-icon class="product-icon">water_drop</mat-icon>
+    </div>
+
+    <div class="product-info">
+      <h1>{{ product.name }}</h1>
+      <p class="product-description">{{ product.description }}</p>
+
+      <div class="price-info">
+        <span class="price-label">Precio desde:</span>
+        <span class="price">${{ product.basePrice | number : "1.2-2" }}</span>
+      </div>
+
+      <div class="product-actions">
+        <button
+          mat-raised-button
+          color="primary"
+          [routerLink]="['/quotes']"
+          [queryParams]="{ productId: product.id }"
+        >
+          <mat-icon>request_quote</mat-icon>
+          Solicitar Cotización
+        </button>
+        <button mat-stroked-button routerLink="/products">
+          <mat-icon>arrow_back</mat-icon>
+          Volver al Catálogo
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <div class="product-details">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Componentes Incluidos</mat-card-title>
+        <mat-card-subtitle
+          >Materiales y especificaciones técnicas</mat-card-subtitle
+        >
+      </mat-card-header>
+      <mat-card-content>
+        <div
+          class="materials-grid"
+          *ngIf="product.materials.length > 0; else noMaterials"
+        >
+          <div class="material-item" *ngFor="let material of product.materials">
+            <div class="material-info">
+              <h3>{{ material.materialName }}</h3>
+              <p>Cantidad: {{ material.quantity }}</p>
+              <p>Costo unitario: ${{ material.unitCost | number : "1.2-2" }}</p>
+            </div>
+            <div class="material-cost">
+              <span class="total-cost">
+                ${{ material.quantity * material.unitCost | number : "1.2-2" }}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <ng-template #noMaterials>
+          <p class="no-materials">
+            No hay información de materiales disponible.
+          </p>
+        </ng-template>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Características del Sistema</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="features-list">
+          <div class="feature-item">
+            <mat-icon>sensors</mat-icon>
+            <div>
+              <h4>Sensores IoT Integrados</h4>
+              <p>
+                Monitoreo continuo de pH, conductividad, turbidez y otros
+                parámetros críticos
+              </p>
+            </div>
+          </div>
+
+          <div class="feature-item">
+            <mat-icon>cloud</mat-icon>
+            <div>
+              <h4>Conectividad en la Nube</h4>
+              <p>
+                Acceso remoto y almacenamiento de datos históricos para análisis
+              </p>
+            </div>
+          </div>
+
+          <div class="feature-item">
+            <mat-icon>auto_fix_high</mat-icon>
+            <div>
+              <h4>Automatización Inteligente</h4>
+              <p>
+                Ajuste automático de parámetros basado en condiciones del
+                cultivo
+              </p>
+            </div>
+          </div>
+
+          <div class="feature-item">
+            <mat-icon>mobile_friendly</mat-icon>
+            <div>
+              <h4>App Móvil</h4>
+              <p>
+                Control y monitoreo desde cualquier lugar con notificaciones en
+                tiempo real
+              </p>
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card *ngIf="reviews.length > 0">
+      <mat-card-header>
+        <mat-card-title>Reseñas de Clientes</mat-card-title>
+        <mat-card-subtitle>{{ reviews.length }} reseña(s)</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="reviews-list">
+          <div class="review-item" *ngFor="let review of reviews">
+            <div class="review-header">
+              <strong>{{ review.userName }}</strong>
+              <app-rating-display [rating]="review.rating"></app-rating-display>
+            </div>
+            <p class="review-comment">{{ review.comment }}</p>
+            <small class="review-date">{{
+              review.createdAt | date : "dd/MM/yyyy"
+            }}</small>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
+
+<div class="loading-container" *ngIf="!product">
+  <mat-icon>hourglass_empty</mat-icon>
+  <p>Cargando información del producto...</p>
+</div>

@@ -1,0 +1,148 @@
+.dashboard-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.dashboard-header {
+  margin-bottom: 32px;
+
+  h1 {
+    color: #2e7d32;
+    margin-bottom: 8px;
+  }
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.stat-card {
+  height: 120px;
+}
+
+.stat-content {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  height: 100%;
+}
+
+.stat-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+
+  &.users { background: #4caf50; }
+  &.products { background: #2196f3; }
+  &.quotes { background: #ff9800; }
+  &.pending { background: #f44336; }
+}
+
+.stat-details {
+  h2 {
+    margin: 0;
+    font-size: 2rem;
+    color: #333;
+  }
+
+  p {
+    margin: 4px 0 0 0;
+    color: #666;
+    font-size: 0.9rem;
+  }
+}
+
+.dashboard-content {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 24px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.status-badge {
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 500;
+
+  &.status-pending { background: #fff3e0; color: #f57c00; }
+  &.status-approved { background: #e8f5e8; color: #2e7d32; }
+  &.status-rejected { background: #ffebee; color: #c62828; }
+  &.status-completed { background: #e3f2fd; color: #1976d2; }
+}
+
+.no-data {
+  text-align: center;
+  padding: 32px;
+  color: #666;
+
+  mat-icon {
+    font-size: 48px;
+    height: 48px;
+    width: 48px;
+    margin-bottom: 16px;
+  }
+}
+
+.product-ranking {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.product-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px;
+  background: #f5f5f5;
+  border-radius: 8px;
+}
+
+.rank {
+  width: 32px;
+  height: 32px;
+  background: #4caf50;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+.product-info {
+  flex: 1;
+
+  h3 {
+    margin: 0 0 4px 0;
+    font-size: 1rem;
+  }
+
+  p {
+    margin: 0;
+    color: #666;
+    font-size: 0.9rem;
+  }
+}
+
+.revenue {
+  font-weight: bold;
+  color: #2e7d32;
+}
+
+@media (max-width: 768px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

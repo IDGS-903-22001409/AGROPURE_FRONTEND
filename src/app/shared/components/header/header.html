@@ -1,0 +1,72 @@
+<mat-toolbar color="primary" class="header-toolbar">
+  <div class="toolbar-content">
+    <div class="brand">
+      <a routerLink="/" class="brand-link">
+        <mat-icon>water_drop</mat-icon>
+        <span>AGROPURE</span>
+      </a>
+    </div>
+
+    <nav class="nav-links">
+      <a
+        mat-button
+        routerLink="/"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        >Inicio</a
+      >
+      <a mat-button routerLink="/products" routerLinkActive="active"
+        >Productos</a
+      >
+      <a
+        mat-button
+        routerLink="/quotes"
+        routerLinkActive="active"
+        *ngIf="currentUser$ | async"
+        >Cotizar</a
+      >
+      <a
+        mat-button
+        routerLink="/dashboard"
+        routerLinkActive="active"
+        *ngIf="(currentUser$ | async)?.role === 'Admin'"
+        >Dashboard</a
+      >
+    </nav>
+
+    <div class="user-menu">
+      <ng-container *ngIf="currentUser$ | async as user; else guestMenu">
+        <button mat-button [matMenuTriggerFor]="userMenu" class="user-button">
+          <mat-icon>account_circle</mat-icon>
+          <span>{{ user.firstName }}</span>
+        </button>
+        <mat-menu #userMenu="matMenu">
+          <a mat-menu-item routerLink="/profile">
+            <mat-icon>person</mat-icon>
+            <span>Mi Perfil</span>
+          </a>
+          <a
+            mat-menu-item
+            routerLink="/customer/quotes"
+            *ngIf="user.role === 'Customer'"
+          >
+            <mat-icon>assignment</mat-icon>
+            <span>Mis Cotizaciones</span>
+          </a>
+          <mat-divider></mat-divider>
+          <button mat-menu-item (click)="logout()">
+            <mat-icon>exit_to_app</mat-icon>
+            <span>Cerrar Sesión</span>
+          </button>
+        </mat-menu>
+      </ng-container>
+
+      <ng-template #guestMenu>
+        <a mat-button routerLink="/login">Iniciar Sesión</a>
+        <a mat-raised-button color="accent" routerLink="/register"
+          >Registrarse</a
+        >
+      </ng-template>
+    </div>
+  </div>
+</mat-toolbar>

@@ -1,0 +1,11 @@
+.sidebar {
+  width: 250px;
+  background: white;
+  border-right: 1px solid #e0e0e0;
+  height: 100%;
+
+  .active {
+    background-color: #e8f5e8 !important;
+    color: #2e7d32 !important;
+  }
+}

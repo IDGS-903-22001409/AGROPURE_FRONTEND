@@ -1,0 +1,47 @@
+.review-list-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.list-header {
+  margin-bottom: 32px;
+
+  h1 {
+    color: #2e7d32;
+    margin-bottom: 8px;
+  }
+}
+
+.reviews-table {
+  width: 100%;
+}
+
+.comment-cell {
+  max-width: 300px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.pending-row {
+  background-color: #fff3e0;
+}
+
+.no-reviews {
+  text-align: center;
+  padding: 64px 32px;
+
+  mat-icon {
+    font-size: 64px;
+    height: 64px;
+    width: 64px;
+    color: #ccc;
+    margin-bottom: 24px;
+  }
+
+  h2 {
+    color: #666;
+    margin-bottom: 16px;
+  }
+}

@@ -1,1 +1,97 @@
-<p>review-list works!</p>
+<div class="review-list-container">
+  <div class="list-header">
+    <h1>Gestión de Reseñas</h1>
+    <p>Modera las reseñas de productos</p>
+  </div>
+
+  <mat-card *ngIf="reviews.length > 0; else noReviews">
+    <mat-card-content>
+      <table mat-table [dataSource]="reviews" class="reviews-table">
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef>ID</th>
+          <td mat-cell *matCellDef="let review">{{ review.id }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="user">
+          <th mat-header-cell *matHeaderCellDef>Usuario</th>
+          <td mat-cell *matCellDef="let review">{{ review.userName }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="rating">
+          <th mat-header-cell *matHeaderCellDef>Calificación</th>
+          <td mat-cell *matCellDef="let review">
+            <app-rating-display
+              [rating]="review.rating"
+              [showValue]="true"
+            ></app-rating-display>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="comment">
+          <th mat-header-cell *matHeaderCellDef>Comentario</th>
+          <td mat-cell *matCellDef="let review">
+            <div class="comment-cell">{{ review.comment }}</div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>Estado</th>
+          <td mat-cell *matCellDef="let review">
+            <mat-chip [color]="review.isApproved ? 'primary' : 'warn'" selected>
+              {{ review.isApproved ? "Aprobada" : "Pendiente" }}
+            </mat-chip>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="date">
+          <th mat-header-cell *matHeaderCellDef>Fecha</th>
+          <td mat-cell *matCellDef="let review">
+            {{ review.createdAt | date : "dd/MM/yyyy" }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Acciones</th>
+          <td mat-cell *matCellDef="let review">
+            <button
+              mat-icon-button
+              color="primary"
+              (click)="approveReview(review)"
+              *ngIf="!review.isApproved"
+              title="Aprobar reseña"
+            >
+              <mat-icon>check</mat-icon>
+            </button>
+            <button
+              mat-icon-button
+              color="warn"
+              (click)="deleteReview(review)"
+              title="Eliminar reseña"
+            >
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr
+          mat-row
+          *matRowDef="let row; columns: displayedColumns"
+          [class]="!row.isApproved ? 'pending-row' : ''"
+        ></tr>
+      </table>
+    </mat-card-content>
+  </mat-card>
+
+  <ng-template #noReviews>
+    <mat-card>
+      <mat-card-content>
+        <div class="no-reviews">
+          <mat-icon>reviews</mat-icon>
+          <h2>No hay reseñas</h2>
+          <p>Las reseñas de productos aparecerán aquí para su moderación.</p>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </ng-template>
+</div>

@@ -1,0 +1,162 @@
+<div class="home-container">
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-content">
+      <h1 class="hero-title">
+        <mat-icon class="hero-icon">water_drop</mat-icon>
+        AGROPURE
+      </h1>
+      <p class="hero-subtitle">
+        Sistema Inteligente de Monitoreo y Tratamiento de Agua para Riego
+      </p>
+      <p class="hero-description">
+        Optimiza la calidad del agua de riego con nuestra tecnología IoT
+        avanzada. Monitoreo en tiempo real, análisis predictivo y tratamiento
+        automatizado.
+      </p>
+
+      <div
+        class="hero-actions"
+        *ngIf="!(currentUser$ | async); else loggedInActions"
+      >
+        <a
+          mat-raised-button
+          color="primary"
+          routerLink="/register"
+          class="cta-button"
+        >
+          Comenzar Ahora
+        </a>
+        <a mat-stroked-button routerLink="/products" class="secondary-button">
+          Ver Productos
+        </a>
+      </div>
+
+      <ng-template #loggedInActions>
+        <div class="hero-actions">
+          <a
+            mat-raised-button
+            color="primary"
+            routerLink="/products"
+            class="cta-button"
+          >
+            Explorar Productos
+          </a>
+          <a mat-stroked-button routerLink="/quotes" class="secondary-button">
+            Solicitar Cotización
+          </a>
+        </div>
+      </ng-template>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="features-section">
+    <div class="container">
+      <h2 class="section-title">Características Principales</h2>
+      <div class="features-grid">
+        <mat-card class="feature-card">
+          <mat-icon class="feature-icon">sensors</mat-icon>
+          <mat-card-header>
+            <mat-card-title>Sensores IoT</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <p>
+              Monitoreo continuo de pH, conductividad, turbidez y otros
+              parámetros críticos del agua.
+            </p>
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card class="feature-card">
+          <mat-icon class="feature-icon">analytics</mat-icon>
+          <mat-card-header>
+            <mat-card-title>Análisis Predictivo</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <p>
+              IA que predice problemas y optimiza el tratamiento del agua antes
+              de que afecten tus cultivos.
+            </p>
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card class="feature-card">
+          <mat-icon class="feature-icon">automation</mat-icon>
+          <mat-card-header>
+            <mat-card-title>Automatización</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <p>
+              Sistema automatizado de dosificación de químicos y ajuste de
+              parámetros en tiempo real.
+            </p>
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card class="feature-card">
+          <mat-icon class="feature-icon">mobile_friendly</mat-icon>
+          <mat-card-header>
+            <mat-card-title>Control Remoto</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <p>
+              Accede y controla tu sistema desde cualquier lugar con nuestra app
+              móvil y web.
+            </p>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  </section>
+
+  <!-- Benefits Section -->
+  <section class="benefits-section">
+    <div class="container">
+      <h2 class="section-title">Beneficios para tu Cultivo</h2>
+      <div class="benefits-grid">
+        <div class="benefit-item">
+          <mat-icon>trending_up</mat-icon>
+          <h3>Incrementa el Rendimiento</h3>
+          <p>Hasta 30% más de productividad con agua optimizada</p>
+        </div>
+        <div class="benefit-item">
+          <mat-icon>water_drop</mat-icon>
+          <h3>Ahorra Agua</h3>
+          <p>Reduce el consumo hasta en 25% con riego inteligente</p>
+        </div>
+        <div class="benefit-item">
+          <mat-icon>eco</mat-icon>
+          <h3>Agricultura Sostenible</h3>
+          <p>Minimiza el impacto ambiental y químicos</p>
+        </div>
+        <div class="benefit-item">
+          <mat-icon>attach_money</mat-icon>
+          <h3>Reduce Costos</h3>
+          <p>Optimiza recursos y reduce pérdidas de cultivos</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="cta-section">
+    <div class="container">
+      <h2>¿Listo para Revolucionar tu Sistema de Riego?</h2>
+      <p>Únete a más de 500 agricultores que ya confían en AGROPURE</p>
+      <div class="cta-actions">
+        <a
+          mat-raised-button
+          color="accent"
+          routerLink="/quotes"
+          class="cta-button"
+        >
+          Solicitar Cotización
+        </a>
+        <a mat-stroked-button routerLink="/products" class="secondary-button">
+          Ver Catálogo
+        </a>
+      </div>
+    </div>
+  </section>
+</div>
