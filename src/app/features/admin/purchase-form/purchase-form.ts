@@ -51,7 +51,7 @@ import { Supplier } from '../../../core/models/supplier';
             <mat-label>Material</mat-label>
             <mat-select formControlName="materialId" required (selectionChange)="onMaterialChange($event.value)">
               <mat-option *ngFor="let material of filteredMaterials" [value]="material.id">
-                {{ material.name }} - ${{ material.unitCost | number : "1.2-2" }} / {{ material.unit }}
+                {{ material.name }} - ${{ material.unitCost | number:'1.2-2' }} / {{ material.unit }}
               </mat-option>
             </mat-select>
             <mat-error *ngIf="purchaseForm.get('materialId')?.hasError('required')">
@@ -85,7 +85,7 @@ import { Supplier } from '../../../core/models/supplier';
           </div>
 
           <div class="total-display" *ngIf="totalCost > 0">
-            <h3>Total: ${{ totalCost | number : "1.2-2" }}</h3>
+            <h3>Total: ${{ totalCost | number:'1.2-2' }}</h3>
           </div>
 
           <mat-form-field appearance="outline" class="full-width">

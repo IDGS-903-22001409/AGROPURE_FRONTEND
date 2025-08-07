@@ -113,7 +113,7 @@ import { Product } from '../../../core/models/product';
                       *ngFor="let product of products"
                       [value]="product.id"
                     >
-                      {{ product.name }} - ${{ product.basePrice | number : "1.2-2" }}
+                      {{ product.name }} - ${{ product.basePrice | number:'1.2-2' }}
                     </mat-option>
                   </mat-select>
                   <mat-error *ngIf="productForm.get('productId')?.hasError('required')">
@@ -124,7 +124,7 @@ import { Product } from '../../../core/models/product';
                 <div class="product-details" *ngIf="selectedProduct">
                   <h3>{{ selectedProduct.name }}</h3>
                   <p>{{ selectedProduct.description }}</p>
-                  <p><strong>Precio base:</strong> ${{ selectedProduct.basePrice | number : "1.2-2" }}</p>
+                  <p><strong>Precio base:</strong> ${{ selectedProduct.basePrice | number:'1.2-2' }}</p>
                 </div>
 
                 <mat-form-field appearance="outline" class="full-width">
@@ -147,15 +147,15 @@ import { Product } from '../../../core/models/product';
                 <div class="price-calculation" *ngIf="priceCalculation">
                   <div class="price-row">
                     <span>Precio unitario:</span>
-                    <span>${{ priceCalculation.unitPrice | number : "1.2-2" }}</span>
+                    <span>${{ priceCalculation.unitPrice | number:'1.2-2' }}</span>
                   </div>
                   <div class="price-row" *ngIf="priceCalculation.discount > 0">
                     <span>Descuento:</span>
-                    <span class="discount">-${{ priceCalculation.discount | number : "1.2-2" }}</span>
+                    <span class="discount">-${{ priceCalculation.discount | number:'1.2-2' }}</span>
                   </div>
                   <div class="price-row total">
                     <span><strong>Total estimado:</strong></span>
-                    <span><strong>${{ priceCalculation.totalCost | number : "1.2-2" }}</strong></span>
+                    <span><strong>${{ priceCalculation.totalCost | number:'1.2-2' }}</strong></span>
                   </div>
                 </div>
 

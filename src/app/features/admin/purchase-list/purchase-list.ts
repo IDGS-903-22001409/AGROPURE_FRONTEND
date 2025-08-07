@@ -58,14 +58,14 @@ import { PurchaseFormComponent } from '../purchase-form/purchase-form';
             <ng-container matColumnDef="unitCost">
               <th mat-header-cell *matHeaderCellDef>Costo Unitario</th>
               <td mat-cell *matCellDef="let purchase">
-                ${{ purchase.unitCost | number : "1.2-2" }}
+                ${{ purchase.unitCost | number:'1.2-2' }}
               </td>
             </ng-container>
 
             <ng-container matColumnDef="totalCost">
               <th mat-header-cell *matHeaderCellDef>Total</th>
               <td mat-cell *matCellDef="let purchase">
-                <strong>${{ purchase.totalCost | number : "1.2-2" }}</strong>
+                <strong>${{ purchase.totalCost | number:'1.2-2' }}</strong>
               </td>
             </ng-container>
 
@@ -81,7 +81,7 @@ import { PurchaseFormComponent } from '../purchase-form/purchase-form';
             <ng-container matColumnDef="date">
               <th mat-header-cell *matHeaderCellDef>Fecha</th>
               <td mat-cell *matCellDef="let purchase">
-                {{ purchase.purchaseDate | date : "dd/MM/yyyy" }}
+                {{ purchase.purchaseDate | date:'dd/MM/yyyy' }}
               </td>
             </ng-container>
 

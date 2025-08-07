@@ -34,28 +34,28 @@ import { PurchaseService, Inventory } from '../../../core/services/purchase';
             <ng-container matColumnDef="totalQuantity">
               <th mat-header-cell *matHeaderCellDef>Cantidad Total</th>
               <td mat-cell *matCellDef="let item">
-                {{ item.totalQuantity | number : "1.2-2" }} {{ item.unit }}
+                {{ item.totalQuantity | number:'1.2-2' }} {{ item.unit }}
               </td>
             </ng-container>
 
             <ng-container matColumnDef="averageCost">
               <th mat-header-cell *matHeaderCellDef>Costo Promedio</th>
               <td mat-cell *matCellDef="let item">
-                ${{ item.averageCost | number : "1.2-2" }} / {{ item.unit }}
+                ${{ item.averageCost | number:'1.2-2' }} / {{ item.unit }}
               </td>
             </ng-container>
 
             <ng-container matColumnDef="totalValue">
               <th mat-header-cell *matHeaderCellDef>Valor Total</th>
               <td mat-cell *matCellDef="let item">
-                <strong>${{ item.totalValue | number : "1.2-2" }}</strong>
+                <strong>${{ item.totalValue | number:'1.2-2' }}</strong>
               </td>
             </ng-container>
 
             <ng-container matColumnDef="lastPurchaseDate">
               <th mat-header-cell *matHeaderCellDef>Última Compra</th>
               <td mat-cell *matCellDef="let item">
-                {{ item.lastPurchaseDate | date : "dd/MM/yyyy" }}
+                {{ item.lastPurchaseDate | date:'dd/MM/yyyy' }}
               </td>
             </ng-container>
 
@@ -75,7 +75,7 @@ import { PurchaseService, Inventory } from '../../../core/services/purchase';
           <div class="inventory-summary">
             <div class="summary-card">
               <h3>Valor Total del Inventario</h3>
-              <p class="total-value">${{ getTotalInventoryValue() | number : "1.2-2" }}</p>
+              <p class="total-value">${{ getTotalInventoryValue() | number:'1.2-2' }}</p>
             </div>
           </div>
         </mat-card-content>
