@@ -181,6 +181,63 @@
   }
 }
 
+// Estilos para la sección FAQ
+.faq-accordion {
+  width: 100%;
+  
+  .faq-panel {
+    margin-bottom: 8px;
+    border-radius: 8px !important;
+    
+    &::before {
+      display: none; // Quitar línea divisoria por defecto
+    }
+  }
+  
+  .mat-expansion-panel-header {
+    padding: 16px 20px;
+    
+    &:hover {
+      background-color: #f5f5f5;
+    }
+    
+    &.mat-expanded {
+      background-color: #e8f5e8;
+      
+      .faq-icon {
+        color: #2e7d32;
+      }
+    }
+  }
+  
+  .mat-panel-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 500;
+    color: #333;
+  }
+  
+  .faq-icon {
+    color: #4caf50;
+    font-size: 20px;
+    height: 20px;
+    width: 20px;
+  }
+  
+  .faq-answer {
+    padding: 0 20px 20px 52px; // Alineado con el texto de la pregunta
+    margin: 0;
+    line-height: 1.6;
+    color: #666;
+    background-color: #fafafa;
+  }
+  
+  .mat-expansion-panel-body {
+    padding: 0;
+  }
+}
+
 .reviews-list {
   display: flex;
   flex-direction: column;
@@ -219,5 +276,24 @@
     height: 48px;
     width: 48px;
     margin-bottom: 16px;
+  }
+}
+
+// Responsive para FAQ en móviles
+@media (max-width: 768px) {
+  .faq-accordion {
+    .mat-panel-title {
+      font-size: 14px;
+      line-height: 1.4;
+    }
+    
+    .faq-answer {
+      padding: 0 16px 16px 44px;
+      font-size: 14px;
+    }
+    
+    .mat-expansion-panel-header {
+      padding: 12px 16px;
+    }
   }
 }

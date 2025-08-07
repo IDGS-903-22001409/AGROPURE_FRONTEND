@@ -6,11 +6,17 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { ProductService } from '../../../core/services/product';
 import { ReviewService } from '../../../core/services/review';
 import { Product } from '../../../core/models/product';
 import { Review } from '../../../core/models/review';
 import { RatingDisplayComponent } from '../../../shared/components/rating-display/rating-display';
+
+interface FAQ {
+  question: string;
+  answer: string;
+}
 
 @Component({
   selector: 'app-product-detail',
@@ -23,6 +29,7 @@ import { RatingDisplayComponent } from '../../../shared/components/rating-displa
     MatIconModule,
     MatChipsModule,
     MatDividerModule,
+    MatExpansionModule,
     RatingDisplayComponent,
   ],
   templateUrl: './product-detail.html',
@@ -31,6 +38,91 @@ import { RatingDisplayComponent } from '../../../shared/components/rating-displa
 export class ProductDetailComponent implements OnInit {
   product: Product | null = null;
   reviews: Review[] = [];
+  productFAQs: FAQ[] = [];
+
+  // FAQ estáticas por defecto para sistemas de tratamiento de agua
+  private defaultFAQs: FAQ[] = [
+    {
+      question: '¿Qué tipo de mantenimiento requiere el sistema?',
+      answer:
+        'El sistema requiere mantenimiento preventivo cada 3 meses, que incluye limpieza de sensores, calibración de equipos y revisión de filtros. Nuestro equipo técnico puede realizar este mantenimiento o capacitar a su personal.',
+    },
+    {
+      question: '¿Cuánto tiempo tarda la instalación?',
+      answer:
+        'La instalación típica toma entre 2 a 4 días laborales, dependiendo de la complejidad del sistema y las condiciones del sitio. Incluye instalación física, configuración de software y capacitación básica.',
+    },
+    {
+      question: '¿El sistema funciona sin conexión a internet?',
+      answer:
+        'Sí, el sistema puede operar de forma autónoma sin conexión a internet. Sin embargo, para acceder a funciones como monitoreo remoto, alertas móviles y análisis históricos, se requiere conexión a internet.',
+    },
+    {
+      question: '¿Qué parámetros puede monitorear el sistema?',
+      answer:
+        'El sistema monitorea pH, conductividad eléctrica, turbidez, temperatura, oxígeno disuelto, cloro residual y otros parámetros específicos según la configuración del producto.',
+    },
+    {
+      question: '¿Incluye garantía el equipo?',
+      answer:
+        'Sí, todos nuestros sistemas incluyen garantía de 24 meses en componentes electrónicos y 12 meses en sensores. También ofrecemos planes de soporte técnico extendido.',
+    },
+    {
+      question: '¿Puedo integrar el sistema con mi infraestructura existente?',
+      answer:
+        'Sí, nuestros sistemas están diseñados para integrarse con la mayoría de infraestructuras existentes. Nuestro equipo técnico evalúa la compatibilidad durante la fase de cotización.',
+    },
+    {
+      question: '¿Qué capacitación se incluye con la compra?',
+      answer:
+        'Incluimos capacitación básica de operación (4 horas) y un manual de usuario completo. También ofrecemos capacitación avanzada y certificación de operadores como servicio adicional.',
+    },
+    {
+      question: '¿El sistema puede controlar múltiples puntos de tratamiento?',
+      answer:
+        'Sí, dependiendo del modelo, un solo sistema puede controlar múltiples puntos de tratamiento y monitoreo. La capacidad varía según la configuración específica del producto.',
+    },
+  ];
+
+  // FAQ específicas para ciertos tipos de productos
+  private productSpecificFAQs: { [key: string]: FAQ[] } = {
+    sistema_basico: [
+      {
+        question: '¿Es adecuado para pequeñas parcelas?',
+        answer:
+          'Sí, este sistema está diseñado específicamente para parcelas de hasta 5 hectáreas. Es ideal para agricultores que inician en la agricultura de precisión.',
+      },
+      {
+        question: '¿Puedo expandir el sistema más adelante?',
+        answer:
+          'Absolutamente. El sistema básico está diseñado con arquitectura modular que permite agregar sensores y funcionalidades adicionales conforme crezcan sus necesidades.',
+      },
+    ],
+    sistema_avanzado: [
+      {
+        question: '¿Incluye análisis predictivo?',
+        answer:
+          'Sí, el sistema avanzado incluye algoritmos de machine learning que analizan patrones históricos para predecir necesidades de tratamiento y optimizar el uso de recursos.',
+      },
+      {
+        question: '¿Puede manejar múltiples cultivos simultáneamente?',
+        answer:
+          'Sí, el sistema puede configurarse para manejar diferentes perfiles de calidad de agua según el tipo de cultivo, con parámetros específicos para cada zona.',
+      },
+    ],
+    sistema_industrial: [
+      {
+        question: '¿Cumple con normativas industriales?',
+        answer:
+          'Sí, cumple con todas las normativas nacionales e internacionales para sistemas de tratamiento de agua industrial, incluyendo certificaciones ISO y CE.',
+      },
+      {
+        question: '¿Incluye redundancia de sistemas críticos?',
+        answer:
+          'Sí, incluye respaldo automático en componentes críticos como sensores principales, sistemas de comunicación y fuentes de alimentación.',
+      },
+    ],
+  };
 
   constructor(
     private route: ActivatedRoute,
@@ -53,6 +145,7 @@ export class ProductDetailComponent implements OnInit {
     this.productService.getProduct(id).subscribe({
       next: (product) => {
         this.product = product;
+        this.loadFAQs(product);
       },
       error: () => {
         this.router.navigate(['/products']);
@@ -69,5 +162,52 @@ export class ProductDetailComponent implements OnInit {
         console.error('Error loading reviews:', error);
       },
     });
+  }
+
+  private loadFAQs(product: Product): void {
+    // Comenzar con FAQs por defecto
+    this.productFAQs = [...this.defaultFAQs];
+
+    // Agregar FAQs específicas basadas en el nombre o tipo del producto
+    const productName = product.name.toLowerCase();
+    let specificKey = '';
+
+    if (
+      productName.includes('básico') ||
+      productName.includes('starter') ||
+      productName.includes('pequeño')
+    ) {
+      specificKey = 'sistema_basico';
+    } else if (
+      productName.includes('avanzado') ||
+      productName.includes('pro') ||
+      productName.includes('premium')
+    ) {
+      specificKey = 'sistema_avanzado';
+    } else if (
+      productName.includes('industrial') ||
+      productName.includes('enterprise') ||
+      productName.includes('comercial')
+    ) {
+      specificKey = 'sistema_industrial';
+    }
+
+    // Agregar FAQs específicas al final
+    if (specificKey && this.productSpecificFAQs[specificKey]) {
+      this.productFAQs = [
+        ...this.productFAQs,
+        ...this.productSpecificFAQs[specificKey],
+      ];
+    }
+
+    // FAQ adicional sobre el precio si está disponible
+    if (product.basePrice) {
+      this.productFAQs.push({
+        question: '¿El precio mostrado incluye instalación?',
+        answer: `El precio base de $${product.basePrice.toFixed(
+          2
+        )} incluye el equipo y configuración básica. La instalación, capacitación y puesta en marcha se cotizan por separado según las condiciones específicas del sitio.`,
+      });
+    }
   }
 }
