@@ -77,7 +77,6 @@ export class RegisterComponent {
     if (this.registerForm.valid) {
       this.isLoading = true;
       const formData = { ...this.registerForm.value };
-      delete formData.confirmPassword;
 
       this.authService.register(formData).subscribe({
         next: () => {

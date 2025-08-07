@@ -74,7 +74,7 @@ export class LoginComponent {
       });
     } else {
       this.loginForm.patchValue({
-        email: 'juan@example.com',
+        email: 'evazquez9904@gmail.com',
         password: 'customer123',
       });
     }
