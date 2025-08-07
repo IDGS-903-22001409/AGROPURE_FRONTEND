@@ -1,3 +1,4 @@
+<!-- src/app/shared/components/sidebar/sidebar.html -->
 <nav class="sidebar">
   <mat-nav-list>
     <h3 matSubheader>Panel de Administración</h3>
@@ -30,6 +31,16 @@
     <a mat-list-item routerLink="/admin/suppliers" routerLinkActive="active">
       <mat-icon matListIcon>local_shipping</mat-icon>
       <span matListItemTitle>Proveedores</span>
+    </a>
+
+    <a mat-list-item routerLink="/admin/inventory" routerLinkActive="active">
+      <mat-icon matListIcon>inventory_2</mat-icon>
+      <span matListItemTitle>Inventario</span>
+    </a>
+
+    <a mat-list-item routerLink="/admin/purchases" routerLinkActive="active">
+      <mat-icon matListIcon>shopping_cart</mat-icon>
+      <span matListItemTitle>Compras</span>
     </a>
 
     <a mat-list-item routerLink="/admin/reviews" routerLinkActive="active">

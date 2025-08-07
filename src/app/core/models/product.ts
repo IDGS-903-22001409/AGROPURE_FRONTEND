@@ -1,3 +1,6 @@
+// src/app/core/models/product.ts
+import { Review } from './review';
+
 export interface Product {
   id: number;
   name: string;

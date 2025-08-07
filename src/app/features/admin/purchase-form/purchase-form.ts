@@ -1,14 +1,28 @@
+// src/app/features/admin/purchase-form/purchase-form.ts
 import { Component, OnInit, Inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatDialogModule, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import {
+  ReactiveFormsModule,
+  FormBuilder,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
+import {
+  MatDialogModule,
+  MAT_DIALOG_DATA,
+  MatDialogRef,
+} from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
-import { PurchaseService, Purchase, CreatePurchase } from '../../../core/services/purchase';
+import {
+  PurchaseService,
+  Purchase,
+  CreatePurchase,
+} from '../../../core/services/purchase';
 import { MaterialService } from '../../../core/services/material';
 import { SupplierService } from '../../../core/services/supplier';
 import { NotificationService } from '../../../core/services/notification';
@@ -29,123 +43,8 @@ import { Supplier } from '../../../core/models/supplier';
     MatDatepickerModule,
     MatNativeDateModule,
   ],
-  template: `
-    <div class="purchase-form">
-      <h2 mat-dialog-title>{{ data ? 'Editar Compra' : 'Nueva Compra' }}</h2>
-      
-      <mat-dialog-content>
-        <form [formGroup]="purchaseForm">
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Proveedor</mat-label>
-            <mat-select formControlName="supplierId" required (selectionChange)="onSupplierChange($event.value)">
-              <mat-option *ngFor="let supplier of suppliers" [value]="supplier.id">
-                {{ supplier.name }}
-              </mat-option>
-            </mat-select>
-            <mat-error *ngIf="purchaseForm.get('supplierId')?.hasError('required')">
-              El proveedor es requerido
-            </mat-error>
-          </mat-form-field>
-
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Material</mat-label>
-            <mat-select formControlName="materialId" required (selectionChange)="onMaterialChange($event.value)">
-              <mat-option *ngFor="let material of filteredMaterials" [value]="material.id">
-                {{ material.name }} - ${{ material.unitCost | number:'1.2-2' }} / {{ material.unit }}
-              </mat-option>
-            </mat-select>
-            <mat-error *ngIf="purchaseForm.get('materialId')?.hasError('required')">
-              El material es requerido
-            </mat-error>
-          </mat-form-field>
-
-          <div class="form-row">
-            <mat-form-field appearance="outline" class="half-width">
-              <mat-label>Cantidad</mat-label>
-              <input matInput type="number" step="0.01" formControlName="quantity" required (input)="calculateTotal()" />
-              <mat-error *ngIf="purchaseForm.get('quantity')?.hasError('required')">
-                La cantidad es requerida
-              </mat-error>
-              <mat-error *ngIf="purchaseForm.get('quantity')?.hasError('min')">
-                La cantidad debe ser mayor a 0
-              </mat-error>
-            </mat-form-field>
-
-            <mat-form-field appearance="outline" class="half-width">
-              <mat-label>Costo Unitario</mat-label>
-              <input matInput type="number" step="0.01" formControlName="unitCost" required (input)="calculateTotal()" />
-              <span matPrefix>$</span>
-              <mat-error *ngIf="purchaseForm.get('unitCost')?.hasError('required')">
-                El costo es requerido
-              </mat-error>
-              <mat-error *ngIf="purchaseForm.get('unitCost')?.hasError('min')">
-                El costo debe ser mayor a 0
-              </mat-error>
-            </mat-form-field>
-          </div>
-
-          <div class="total-display" *ngIf="totalCost > 0">
-            <h3>Total: ${{ totalCost | number:'1.2-2' }}</h3>
-          </div>
-
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Fecha de Entrega</mat-label>
-            <input matInput [matDatepicker]="picker" formControlName="deliveryDate" />
-            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
-          </mat-form-field>
-
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Notas</mat-label>
-            <textarea matInput formControlName="notes" rows="3"></textarea>
-          </mat-form-field>
-        </form>
-      </mat-dialog-content>
-
-      <mat-dialog-actions>
-        <button mat-button (click)="onCancel()">Cancelar</button>
-        <button 
-          mat-raised-button 
-          color="primary" 
-          (click)="onSubmit()" 
-          [disabled]="purchaseForm.invalid || isLoading">
-          {{ isLoading ? 'Guardando...' : (data ? 'Actualizar' : 'Crear') }}
-        </button>
-      </mat-dialog-actions>
-    </div>
-  `,
-  styles: [`
-    .purchase-form {
-      min-width: 600px;
-    }
-    .full-width {
-      width: 100%;
-      margin-bottom: 16px;
-    }
-    .form-row {
-      display: flex;
-      gap: 16px;
-      margin-bottom: 16px;
-    }
-    .half-width {
-      flex: 1;
-    }
-    .total-display {
-      background: #e8f5e8;
-      padding: 16px;
-      border-radius: 8px;
-      margin: 16px 0;
-      text-align: center;
-    }
-    .total-display h3 {
-      margin: 0;
-      color: #2e7d32;
-    }
-    mat-dialog-actions {
-      justify-content: flex-end;
-      gap: 12px;
-    }
-  `]
+  templateUrl: './purchase-form.html',
+  styleUrls: ['./purchase-form.scss'],
 })
 export class PurchaseFormComponent implements OnInit {
   purchaseForm: FormGroup;
@@ -170,14 +69,14 @@ export class PurchaseFormComponent implements OnInit {
       quantity: [0, [Validators.required, Validators.min(0.01)]],
       unitCost: [0, [Validators.required, Validators.min(0.01)]],
       deliveryDate: [''],
-      notes: ['']
+      notes: [''],
     });
   }
 
   ngOnInit(): void {
     this.loadSuppliers();
     this.loadMaterials();
-    
+
     if (this.data) {
       this.purchaseForm.patchValue({
         supplierId: this.data.supplierId,
@@ -185,7 +84,7 @@ export class PurchaseFormComponent implements OnInit {
         quantity: this.data.quantity,
         unitCost: this.data.unitCost,
         deliveryDate: this.data.deliveryDate,
-        notes: this.data.notes
+        notes: this.data.notes,
       });
       this.calculateTotal();
     }
@@ -195,7 +94,7 @@ export class PurchaseFormComponent implements OnInit {
     this.supplierService.getSuppliers().subscribe({
       next: (suppliers) => {
         this.suppliers = suppliers;
-      }
+      },
     });
   }
 
@@ -204,17 +103,19 @@ export class PurchaseFormComponent implements OnInit {
       next: (materials) => {
         this.materials = materials;
         this.filteredMaterials = materials;
-      }
+      },
     });
   }
 
   onSupplierChange(supplierId: number): void {
-    this.filteredMaterials = this.materials.filter(m => m.supplierId === supplierId);
+    this.filteredMaterials = this.materials.filter(
+      (m) => m.supplierId === supplierId
+    );
     this.purchaseForm.patchValue({ materialId: '' });
   }
 
   onMaterialChange(materialId: number): void {
-    const material = this.materials.find(m => m.id === materialId);
+    const material = this.materials.find((m) => m.id === materialId);
     if (material) {
       this.purchaseForm.patchValue({ unitCost: material.unitCost });
       this.calculateTotal();
@@ -245,7 +146,7 @@ export class PurchaseFormComponent implements OnInit {
         },
         error: () => {
           this.isLoading = false;
-        }
+        },
       });
     }
   }

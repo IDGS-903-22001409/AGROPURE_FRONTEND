@@ -3,6 +3,7 @@ import { provideRouter } from '@angular/router';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideToastr } from 'ngx-toastr';
+import { MatDialogModule } from '@angular/material/dialog';
 
 import { routes } from './app.routes';
 import { authInterceptor } from './core/interceptors/auth';
@@ -21,5 +22,6 @@ export const appConfig: ApplicationConfig = {
       positionClass: 'toast-top-right',
       preventDuplicates: true,
     }),
+    importProvidersFrom(MatDialogModule),
   ],
 };

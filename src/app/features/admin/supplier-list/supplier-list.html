@@ -1,8 +1,11 @@
+<!-- src/app/features/admin/supplier-list/supplier-list.html -->
 <div class="supplier-list-container">
   <div class="list-header">
-    <h1>Gestión de Proveedores</h1>
-    <p>Administra la información de proveedores</p>
-    <button mat-raised-button color="primary">
+    <div class="header-text">
+      <h1>Gestión de Proveedores</h1>
+      <p>Administra la información de proveedores</p>
+    </div>
+    <button mat-raised-button color="primary" (click)="openSupplierForm()">
       <mat-icon>add</mat-icon>
       Nuevo Proveedor
     </button>
@@ -51,7 +54,11 @@
         <ng-container matColumnDef="actions">
           <th mat-header-cell *matHeaderCellDef>Acciones</th>
           <td mat-cell *matCellDef="let supplier">
-            <button mat-icon-button color="primary">
+            <button
+              mat-icon-button
+              color="primary"
+              (click)="editSupplier(supplier)"
+            >
               <mat-icon>edit</mat-icon>
             </button>
             <button
@@ -77,6 +84,14 @@
           <mat-icon>local_shipping</mat-icon>
           <h2>No hay proveedores registrados</h2>
           <p>Agrega proveedores para gestionar el suministro de materiales.</p>
+          <button
+            mat-raised-button
+            color="primary"
+            (click)="openSupplierForm()"
+          >
+            <mat-icon>add</mat-icon>
+            Agregar Primer Proveedor
+          </button>
         </div>
       </mat-card-content>
     </mat-card>

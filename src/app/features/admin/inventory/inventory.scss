@@ -1,0 +1,76 @@
+.inventory-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.inventory-header {
+  margin-bottom: 32px;
+
+  h1 {
+    color: #2e7d32;
+    margin-bottom: 8px;
+  }
+}
+
+.inventory-table {
+  width: 100%;
+}
+
+.inventory-summary {
+  margin-top: 24px;
+  display: flex;
+  justify-content: center;
+}
+
+.summary-card {
+  background: #e8f5e8;
+  padding: 24px;
+  border-radius: 8px;
+  text-align: center;
+
+  h3 {
+    margin: 0 0 12px 0;
+    color: #2e7d32;
+  }
+}
+
+.total-value {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #2e7d32;
+  margin: 0;
+}
+
+.stock-low {
+  color: #f44336;
+  font-weight: 500;
+}
+
+.stock-medium {
+  color: #ff9800;
+  font-weight: 500;
+}
+
+.stock-good {
+  color: #4caf50;
+  font-weight: 500;
+}
+
+.no-inventory {
+  text-align: center;
+  padding: 64px 32px;
+
+  mat-icon {
+    font-size: 64px;
+    height: 64px;
+    width: 64px;
+    color: #ccc;
+    margin-bottom: 24px;
+  }
+
+  h2 {
+    color: #666;
+    margin-bottom: 16px;
+  }
+}

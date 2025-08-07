@@ -1,3 +1,4 @@
+// src/app/features/admin/supplier-list/supplier-list.ts
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
@@ -5,9 +6,11 @@ import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatDialog } from '@angular/material/dialog';
 import { SupplierService } from '../../../core/services/supplier';
 import { NotificationService } from '../../../core/services/notification';
 import { Supplier } from '../../../core/models/supplier';
+import { SupplierFormComponent } from '../supplier-form/supplier-form';
 
 @Component({
   selector: 'app-supplier-list',
@@ -36,7 +39,8 @@ export class SupplierListComponent implements OnInit {
 
   constructor(
     private supplierService: SupplierService,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -52,6 +56,23 @@ export class SupplierListComponent implements OnInit {
         console.error('Error loading suppliers:', error);
       },
     });
+  }
+
+  openSupplierForm(supplier?: Supplier): void {
+    const dialogRef = this.dialog.open(SupplierFormComponent, {
+      width: '600px',
+      data: supplier || null,
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.loadSuppliers();
+      }
+    });
+  }
+
+  editSupplier(supplier: Supplier): void {
+    this.openSupplierForm(supplier);
   }
 
   deleteSupplier(supplier: Supplier): void {

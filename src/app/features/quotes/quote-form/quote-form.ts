@@ -16,8 +16,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatStepperModule } from '@angular/material/stepper';
 import { QuoteService } from '../../../core/services/quote';
 import { ProductService } from '../../../core/services/product';
+import { AuthService } from '../../../core/services/auth';
 import { NotificationService } from '../../../core/services/notification';
 import { Product } from '../../../core/models/product';
+import { CreateQuoteRequest } from '../../../core/models/quote';
 
 @Component({
   selector: 'app-quote-form',
@@ -50,6 +52,7 @@ export class QuoteFormComponent implements OnInit {
     private fb: FormBuilder,
     private quoteService: QuoteService,
     private productService: ProductService,
+    private authService: AuthService,
     private notificationService: NotificationService,
     private router: Router,
     private route: ActivatedRoute
@@ -126,10 +129,19 @@ export class QuoteFormComponent implements OnInit {
     if (this.productForm.valid && this.quantityForm.valid) {
       this.isSubmitting = true;
 
-      const quoteData = {
+      const currentUser = this.authService.getCurrentUser();
+      if (!currentUser) {
+        this.notificationService.error('Usuario no autenticado');
+        this.isSubmitting = false;
+        return;
+      }
+
+      const quoteData: CreateQuoteRequest = {
         productId: this.productForm.get('productId')?.value,
         quantity: this.quantityForm.get('quantity')?.value,
-        customerNotes: this.notesForm.get('customerNotes')?.value,
+        customerName: `${currentUser.firstName} ${currentUser.lastName}`,
+        customerEmail: currentUser.email,
+        notes: this.notesForm.get('customerNotes')?.value,
       };
 
       this.quoteService.createQuote(quoteData).subscribe({

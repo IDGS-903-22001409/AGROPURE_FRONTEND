@@ -13,24 +13,24 @@ export interface Quote {
   quantity: number;
   unitPrice: number;
   totalCost: number;
-  discount: number;
-  status: QuoteStatus;
+  status: QuoteStatus | string; // Permitir tanto enum como string
   notes?: string;
   adminNotes?: string;
   isPublicQuote: boolean;
-  createdAt: Date;
-  updatedAt: Date;
-  expiryDate?: Date;
+  requestDate: Date | string; // Permitir tanto Date como string
+  responseDate?: Date | string;
+  expiryDate?: Date | string;
+  userFullName?: string;
 }
 
 export interface CreateQuoteRequest {
   productId: number;
   quantity: number;
-  customerName: string;
-  customerEmail: string;
+  notes?: string;
+  customerName?: string;
+  customerEmail?: string;
   customerPhone?: string;
   customerAddress?: string;
-  notes?: string;
 }
 
 export interface CreatePublicQuoteRequest {

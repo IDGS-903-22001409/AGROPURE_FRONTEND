@@ -1,3 +1,4 @@
+// src/app/features/admin/supplier-form/supplier-form.ts
 import { Component, OnInit, Inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
@@ -29,85 +30,8 @@ import { Supplier } from '../../../core/models/supplier';
     MatInputModule,
     MatButtonModule,
   ],
-  template: `
-    <div class="supplier-form">
-      <h2 mat-dialog-title>
-        {{ data ? 'Editar Proveedor' : 'Nuevo Proveedor' }}
-      </h2>
-
-      <mat-dialog-content>
-        <form [formGroup]="supplierForm">
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Nombre de la Empresa</mat-label>
-            <input matInput formControlName="name" required />
-            <mat-error *ngIf="supplierForm.get('name')?.hasError('required')">
-              El nombre es requerido
-            </mat-error>
-          </mat-form-field>
-
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Persona de Contacto</mat-label>
-            <input matInput formControlName="contactPerson" />
-          </mat-form-field>
-
-          <div class="form-row">
-            <mat-form-field appearance="outline" class="half-width">
-              <mat-label>Email</mat-label>
-              <input matInput type="email" formControlName="email" />
-              <mat-error *ngIf="supplierForm.get('email')?.hasError('email')">
-                Ingresa un email válido
-              </mat-error>
-            </mat-form-field>
-
-            <mat-form-field appearance="outline" class="half-width">
-              <mat-label>Teléfono</mat-label>
-              <input matInput formControlName="phone" />
-            </mat-form-field>
-          </div>
-
-          <mat-form-field appearance="outline" class="full-width">
-            <mat-label>Dirección</mat-label>
-            <textarea matInput formControlName="address" rows="3"></textarea>
-          </mat-form-field>
-        </form>
-      </mat-dialog-content>
-
-      <mat-dialog-actions>
-        <button mat-button (click)="onCancel()">Cancelar</button>
-        <button
-          mat-raised-button
-          color="primary"
-          (click)="onSubmit()"
-          [disabled]="supplierForm.invalid || isLoading"
-        >
-          {{ isLoading ? 'Guardando...' : data ? 'Actualizar' : 'Crear' }}
-        </button>
-      </mat-dialog-actions>
-    </div>
-  `,
-  styles: [
-    `
-      .supplier-form {
-        min-width: 500px;
-      }
-      .full-width {
-        width: 100%;
-        margin-bottom: 16px;
-      }
-      .form-row {
-        display: flex;
-        gap: 16px;
-        margin-bottom: 16px;
-      }
-      .half-width {
-        flex: 1;
-      }
-      mat-dialog-actions {
-        justify-content: flex-end;
-        gap: 12px;
-      }
-    `,
-  ],
+  templateUrl: './supplier-form.html',
+  styleUrls: ['./supplier-form.scss'],
 })
 export class SupplierFormComponent implements OnInit {
   supplierForm: FormGroup;

@@ -1,0 +1,77 @@
+/* src/app/features/quotes/public-quote-form/public-quote-form.scss */
+.quote-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.quote-card {
+  padding: 20px;
+}
+
+mat-card-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.full-width {
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.form-row {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 16px;
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+    gap: 0;
+  }
+}
+
+.half-width {
+  flex: 1;
+}
+
+.product-details {
+  background: #f5f5f5;
+  padding: 16px;
+  border-radius: 8px;
+  margin: 16px 0;
+
+  h3 {
+    margin: 0 0 8px 0;
+    color: #2e7d32;
+  }
+}
+
+.price-calculation {
+  background: #e8f5e8;
+  padding: 16px;
+  border-radius: 8px;
+  margin: 16px 0;
+}
+
+.price-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+
+  &.total {
+    border-top: 1px solid #ccc;
+    padding-top: 8px;
+    margin-top: 8px;
+  }
+}
+
+.discount {
+  color: #4caf50;
+}
+
+.step-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+}

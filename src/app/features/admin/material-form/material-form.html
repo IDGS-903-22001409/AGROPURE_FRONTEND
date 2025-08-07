@@ -1,0 +1,79 @@
+<div class="material-form">
+  <h2 mat-dialog-title>
+    {{ data ? "Editar Material" : "Nuevo Material" }}
+  </h2>
+
+  <mat-dialog-content>
+    <form [formGroup]="materialForm">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Nombre del Material</mat-label>
+        <input matInput formControlName="name" required />
+        <mat-error *ngIf="materialForm.get('name')?.hasError('required')">
+          El nombre es requerido
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Descripción</mat-label>
+        <textarea matInput formControlName="description" rows="3"></textarea>
+      </mat-form-field>
+
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label>Costo Unitario</mat-label>
+          <input
+            matInput
+            type="number"
+            step="0.01"
+            formControlName="unitCost"
+            required
+          />
+          <span matPrefix>$</span>
+          <mat-error *ngIf="materialForm.get('unitCost')?.hasError('required')">
+            El costo es requerido
+          </mat-error>
+          <mat-error *ngIf="materialForm.get('unitCost')?.hasError('min')">
+            El costo debe ser mayor a 0
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="half-width">
+          <mat-label>Unidad de Medida</mat-label>
+          <input
+            matInput
+            formControlName="unit"
+            required
+            placeholder="kg, m, pcs, etc."
+          />
+          <mat-error *ngIf="materialForm.get('unit')?.hasError('required')">
+            La unidad es requerida
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Proveedor</mat-label>
+        <mat-select formControlName="supplierId" required>
+          <mat-option *ngFor="let supplier of suppliers" [value]="supplier.id">
+            {{ supplier.name }}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="materialForm.get('supplierId')?.hasError('required')">
+          El proveedor es requerido
+        </mat-error>
+      </mat-form-field>
+    </form>
+  </mat-dialog-content>
+
+  <mat-dialog-actions>
+    <button mat-button (click)="onCancel()">Cancelar</button>
+    <button
+      mat-raised-button
+      color="primary"
+      (click)="onSubmit()"
+      [disabled]="materialForm.invalid || isLoading"
+    >
+      {{ isLoading ? "Guardando..." : data ? "Actualizar" : "Crear" }}
+    </button>
+  </mat-dialog-actions>
+</div>

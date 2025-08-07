@@ -71,3 +71,67 @@
     margin-bottom: 32px;
   }
 }
+
+// Loading State
+.loading-container {
+  margin-top: 32px;
+}
+
+.loading-content {
+  text-align: center;
+  padding: 64px 32px;
+
+  mat-spinner {
+    margin: 0 auto 24px auto;
+  }
+
+  p {
+    color: #666;
+    margin: 0;
+  }
+}
+
+// Error State
+.error-container {
+  margin-top: 32px;
+}
+
+.error-content {
+  text-align: center;
+  padding: 64px 32px;
+
+  mat-icon {
+    font-size: 64px;
+    height: 64px;
+    width: 64px;
+    margin-bottom: 24px;
+  }
+
+  h2 {
+    color: #666;
+    margin-bottom: 16px;
+  }
+
+  p {
+    color: #999;
+    margin-bottom: 32px;
+  }
+}
+
+// Debug Info (opcional, puedes eliminarlo en producción)
+.debug-info {
+  margin-top: 20px;
+  background-color: #f0f8f0;
+  border: 1px solid #4caf50;
+
+  h3 {
+    color: #2e7d32;
+    margin: 0 0 12px 0;
+  }
+
+  p {
+    margin: 4px 0;
+    font-size: 14px;
+    color: #2e7d32;
+  }
+}

@@ -1,3 +1,4 @@
+// src/app/app.routes.ts
 import { Routes } from '@angular/router';
 import { MainLayoutComponent } from './layouts/main-layout/main-layout';
 import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout';
@@ -126,6 +127,20 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/admin/review-list/review-list').then(
             (m) => m.ReviewListComponent
+          ),
+      },
+      {
+        path: 'inventory',
+        loadComponent: () =>
+          import('./features/admin/inventory/inventory').then(
+            (m) => m.InventoryComponent
+          ),
+      },
+      {
+        path: 'purchases',
+        loadComponent: () =>
+          import('./features/admin/purchase-list/purchase-list').then(
+            (m) => m.PurchaseListComponent
           ),
       },
     ],

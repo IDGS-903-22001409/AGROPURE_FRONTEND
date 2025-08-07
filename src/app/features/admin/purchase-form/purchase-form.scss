@@ -1,0 +1,42 @@
+/* src/app/features/admin/purchase-form/purchase-form.scss */
+.purchase-form {
+  min-width: 600px;
+}
+
+.full-width {
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.form-row {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 16px;
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+    gap: 0;
+  }
+}
+
+.half-width {
+  flex: 1;
+}
+
+.total-display {
+  background: #e8f5e8;
+  padding: 16px;
+  border-radius: 8px;
+  margin: 16px 0;
+  text-align: center;
+
+  h3 {
+    margin: 0;
+    color: #2e7d32;
+  }
+}
+
+mat-dialog-actions {
+  justify-content: flex-end;
+  gap: 12px;
+}

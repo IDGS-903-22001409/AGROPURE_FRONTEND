@@ -1,5 +1,5 @@
-/* src/app/features/admin/material-list/material-list.scss */
-.material-list-container {
+/* src/app/features/admin/purchase-list/purchase-list.scss */
+.purchase-list-container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
@@ -33,11 +33,11 @@
   }
 }
 
-.materials-table {
+.purchases-table {
   width: 100%;
 }
 
-.no-materials {
+.no-purchases {
   text-align: center;
   padding: 64px 32px;
 
