@@ -1,7 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiService } from './api';
-import { Quote, CreateQuoteRequest } from '../models/quote';
+import {
+  Quote,
+  CreateQuoteRequest,
+  CreatePublicQuoteRequest,
+} from '../models/quote';
 import { QuoteStatus } from '../models/enums';
 
 @Injectable({
@@ -12,6 +16,10 @@ export class QuoteService {
 
   createQuote(quoteData: CreateQuoteRequest): Observable<Quote> {
     return this.apiService.post<Quote>('quotes', quoteData);
+  }
+
+  createPublicQuote(quoteData: CreatePublicQuoteRequest): Observable<Quote> {
+    return this.apiService.post<Quote>('quotes/public', quoteData);
   }
 
   getQuotes(): Observable<Quote[]> {
@@ -26,8 +34,22 @@ export class QuoteService {
     return this.apiService.get<Quote>(`quotes/${id}`);
   }
 
-  updateQuoteStatus(id: number, status: QuoteStatus): Observable<Quote> {
-    return this.apiService.put<Quote>(`quotes/${id}/status`, { status });
+  updateQuoteStatus(
+    id: number,
+    status: QuoteStatus,
+    adminNotes?: string
+  ): Observable<Quote> {
+    return this.apiService.put<Quote>(`quotes/${id}/status`, {
+      status,
+      adminNotes,
+    });
+  }
+
+  approveAndCreateUser(id: number): Observable<void> {
+    return this.apiService.post<void>(
+      `quotes/${id}/approve-and-create-user`,
+      {}
+    );
   }
 
   deleteQuote(id: number): Observable<void> {
