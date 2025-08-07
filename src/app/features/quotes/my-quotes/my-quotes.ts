@@ -31,7 +31,7 @@ import { Subscription } from 'rxjs';
 })
 export class MyQuotesComponent implements OnInit, OnDestroy {
   quotes: Quote[] = [];
-  isLoading = true;
+  isLoading = false; // CAMBIO: Empezar en false para evitar loading infinito
   hasError = false;
   errorMessage = '';
   currentUserId: number | null = null;
@@ -43,8 +43,7 @@ export class MyQuotesComponent implements OnInit, OnDestroy {
     'product',
     'quantity',
     'unitPrice',
-    'discount',
-    'total',
+    'total', // CAMBIO: Quitar 'discount' porque no existe en el modelo
     'status',
     'date',
   ];
@@ -61,14 +60,15 @@ export class MyQuotesComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    // Limpiar suscripciones para evitar memory leaks
     this.subscriptions.forEach((sub) => sub.unsubscribe());
   }
 
   private loadUserQuotes(): void {
     try {
+      // CAMBIO: Inicializar estado correctamente
       this.isLoading = true;
       this.hasError = false;
+      this.errorMessage = '';
 
       const currentUser = this.authService.getCurrentUser();
       console.log('MyQuotesComponent: Usuario actual:', currentUser);
@@ -91,18 +91,26 @@ export class MyQuotesComponent implements OnInit, OnDestroy {
         .getUserQuotes(currentUser.id)
         .subscribe({
           next: (quotes) => {
-            console.log('MyQuotesComponent: Cotizaciones recibidas:', quotes);
-            this.quotes = quotes || [];
-            this.isLoading = false;
-            this.hasError = false;
+            console.log('MyQuotesComponent: Respuesta cruda:', quotes);
 
-            if (this.quotes.length === 0) {
-              console.log('MyQuotesComponent: No se encontraron cotizaciones');
-            } else {
+            // CAMBIO: Validar que quotes sea un array
+            if (Array.isArray(quotes)) {
+              this.quotes = quotes;
               console.log(
                 `MyQuotesComponent: Se cargaron ${this.quotes.length} cotizaciones`
               );
+            } else {
+              console.error(
+                'MyQuotesComponent: La respuesta no es un array:',
+                quotes
+              );
+              this.quotes = [];
+              this.hasError = true;
+              this.errorMessage = 'Error en formato de datos recibidos';
             }
+
+            this.isLoading = false;
+            this.hasError = false;
           },
           error: (error) => {
             console.error(
@@ -113,6 +121,7 @@ export class MyQuotesComponent implements OnInit, OnDestroy {
             this.errorMessage =
               error.message || 'Error cargando las cotizaciones';
             this.isLoading = false;
+            this.quotes = []; // CAMBIO: Limpiar quotes en caso de error
 
             // Mostrar notificación de error
             this.notificationService.error('Error cargando tus cotizaciones');
@@ -125,23 +134,25 @@ export class MyQuotesComponent implements OnInit, OnDestroy {
       this.hasError = true;
       this.errorMessage = 'Error inesperado al cargar cotizaciones';
       this.isLoading = false;
+      this.quotes = [];
     }
   }
 
-  // Método para recargar manualmente
   reloadQuotes(): void {
     console.log('MyQuotesComponent: Recargando cotizaciones manualmente...');
     this.loadUserQuotes();
   }
 
   getStatusColor(status: string): 'primary' | 'accent' | 'warn' {
-    switch (status) {
-      case 'Approved':
-      case 'Completed':
+    // CAMBIO: Manejar diferentes formatos de status
+    const statusStr = typeof status === 'string' ? status : String(status);
+    switch (statusStr.toLowerCase()) {
+      case 'approved':
+      case 'completed':
         return 'primary';
-      case 'Pending':
+      case 'pending':
         return 'accent';
-      case 'Rejected':
+      case 'rejected':
         return 'warn';
       default:
         return 'accent';
@@ -149,39 +160,62 @@ export class MyQuotesComponent implements OnInit, OnDestroy {
   }
 
   getStatusText(status: string): string {
-    switch (status) {
-      case 'Pending':
+    // CAMBIO: Manejar diferentes formatos de status
+    const statusStr = typeof status === 'string' ? status : String(status);
+    switch (statusStr.toLowerCase()) {
+      case 'pending':
         return 'Pendiente';
-      case 'Approved':
+      case 'approved':
         return 'Aprobada';
-      case 'Rejected':
+      case 'rejected':
         return 'Rechazada';
-      case 'Completed':
+      case 'completed':
         return 'Completada';
       default:
-        return status;
+        return statusStr;
     }
   }
 
   getPendingCount(): number {
-    return this.quotes.filter((q) => q.status === 'Pending').length;
+    return this.quotes.filter((q) => {
+      const status = typeof q.status === 'string' ? q.status : String(q.status);
+      return status.toLowerCase() === 'pending';
+    }).length;
   }
 
   getApprovedCount(): number {
-    return this.quotes.filter(
-      (q) => q.status === 'Approved' || q.status === 'Completed'
-    ).length;
+    return this.quotes.filter((q) => {
+      const status = typeof q.status === 'string' ? q.status : String(q.status);
+      return ['approved', 'completed'].includes(status.toLowerCase());
+    }).length;
   }
 
   getTotalValue(): number {
     return this.quotes
-      .filter((q) => q.status === 'Approved' || q.status === 'Completed')
-      .reduce((sum, q) => sum + q.totalCost, 0);
+      .filter((q) => {
+        const status =
+          typeof q.status === 'string' ? q.status : String(q.status);
+        return ['approved', 'completed'].includes(status.toLowerCase());
+      })
+      .reduce((sum, q) => sum + (q.totalCost || 0), 0);
   }
 
-  // Calcular descuento para mostrar
+  // CAMBIO: Simplificar cálculo de descuento
   getDiscount(quote: Quote): number {
+    if (!quote.unitPrice || !quote.quantity || !quote.totalCost) {
+      return 0;
+    }
     const baseTotal = quote.unitPrice * quote.quantity;
-    return baseTotal - quote.totalCost;
+    return Math.max(0, baseTotal - quote.totalCost);
+  }
+
+  // CAMBIO: Método para debug - eliminar en producción
+  debugInfo(): void {
+    console.log('=== DEBUG INFO ===');
+    console.log('isLoading:', this.isLoading);
+    console.log('hasError:', this.hasError);
+    console.log('quotes:', this.quotes);
+    console.log('quotes length:', this.quotes.length);
+    console.log('currentUserId:', this.currentUserId);
   }
 }

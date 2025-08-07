@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
+import { catchError, tap } from 'rxjs/operators';
 import { ApiService } from './api';
 import {
   Quote,
@@ -15,23 +16,79 @@ export class QuoteService {
   constructor(private apiService: ApiService) {}
 
   createQuote(quoteData: CreateQuoteRequest): Observable<Quote> {
-    return this.apiService.post<Quote>('quotes', quoteData);
+    return this.apiService.post<Quote>('quotes', quoteData).pipe(
+      tap((response) =>
+        console.log('QuoteService.createQuote response:', response)
+      ),
+      catchError((error) => {
+        console.error('QuoteService.createQuote error:', error);
+        return throwError(error);
+      })
+    );
   }
 
   createPublicQuote(quoteData: CreatePublicQuoteRequest): Observable<Quote> {
-    return this.apiService.post<Quote>('quotes/public', quoteData);
+    return this.apiService.post<Quote>('quotes/public', quoteData).pipe(
+      tap((response) =>
+        console.log('QuoteService.createPublicQuote response:', response)
+      ),
+      catchError((error) => {
+        console.error('QuoteService.createPublicQuote error:', error);
+        return throwError(error);
+      })
+    );
   }
 
   getQuotes(): Observable<Quote[]> {
-    return this.apiService.get<Quote[]>('quotes');
+    return this.apiService.get<Quote[]>('quotes').pipe(
+      tap((response) =>
+        console.log('QuoteService.getQuotes response:', response)
+      ),
+      catchError((error) => {
+        console.error('QuoteService.getQuotes error:', error);
+        return throwError(error);
+      })
+    );
   }
 
   getUserQuotes(userId: number): Observable<Quote[]> {
-    return this.apiService.get<Quote[]>(`quotes/user/${userId}`);
+    console.log(`QuoteService.getUserQuotes: Llamando a quotes/user/${userId}`);
+
+    return this.apiService.get<Quote[]>(`quotes/user/${userId}`).pipe(
+      tap((response) => {
+        console.log('QuoteService.getUserQuotes response:', response);
+        console.log('Response type:', typeof response);
+        console.log('Is array:', Array.isArray(response));
+        if (Array.isArray(response)) {
+          console.log('Array length:', response.length);
+          response.forEach((quote, index) => {
+            console.log(`Quote ${index}:`, quote);
+          });
+        }
+      }),
+      catchError((error) => {
+        console.error('QuoteService.getUserQuotes error:', error);
+        console.error('Error details:', {
+          status: error.status,
+          statusText: error.statusText,
+          message: error.message,
+          error: error.error,
+        });
+        return throwError(error);
+      })
+    );
   }
 
   getQuote(id: number): Observable<Quote> {
-    return this.apiService.get<Quote>(`quotes/${id}`);
+    return this.apiService.get<Quote>(`quotes/${id}`).pipe(
+      tap((response) =>
+        console.log('QuoteService.getQuote response:', response)
+      ),
+      catchError((error) => {
+        console.error('QuoteService.getQuote error:', error);
+        return throwError(error);
+      })
+    );
   }
 
   updateQuoteStatus(
@@ -39,20 +96,45 @@ export class QuoteService {
     status: QuoteStatus,
     adminNotes?: string
   ): Observable<Quote> {
-    return this.apiService.put<Quote>(`quotes/${id}/status`, {
-      status,
-      adminNotes,
-    });
+    return this.apiService
+      .put<Quote>(`quotes/${id}/status`, {
+        status,
+        adminNotes,
+      })
+      .pipe(
+        tap((response) =>
+          console.log('QuoteService.updateQuoteStatus response:', response)
+        ),
+        catchError((error) => {
+          console.error('QuoteService.updateQuoteStatus error:', error);
+          return throwError(error);
+        })
+      );
   }
 
   approveAndCreateUser(id: number): Observable<void> {
-    return this.apiService.post<void>(
-      `quotes/${id}/approve-and-create-user`,
-      {}
-    );
+    return this.apiService
+      .post<void>(`quotes/${id}/approve-and-create-user`, {})
+      .pipe(
+        tap((response) =>
+          console.log('QuoteService.approveAndCreateUser response:', response)
+        ),
+        catchError((error) => {
+          console.error('QuoteService.approveAndCreateUser error:', error);
+          return throwError(error);
+        })
+      );
   }
 
   deleteQuote(id: number): Observable<void> {
-    return this.apiService.delete<void>(`quotes/${id}`);
+    return this.apiService.delete<void>(`quotes/${id}`).pipe(
+      tap((response) =>
+        console.log('QuoteService.deleteQuote response:', response)
+      ),
+      catchError((error) => {
+        console.error('QuoteService.deleteQuote error:', error);
+        return throwError(error);
+      })
+    );
   }
 }
