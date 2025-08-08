@@ -1,136 +1,68 @@
 <div class="quote-list-container">
-  <!-- Header con estadísticas -->
-  <div class="list-header">
-    <div class="header-text">
-      <h1>Gestión de Cotizaciones</h1>
-      <p>Administra todas las cotizaciones del sistema</p>
-    </div>
+  <!-- Encabezado -->
+  <header class="list-header">
+    <h1>Gestión de Cotizaciones</h1>
+    <p>Administra todas las cotizaciones del sistema</p>
+  </header>
 
-    <!-- Estadísticas rápidas -->
-    <div class="stats-cards">
-      <mat-card class="stat-card pending">
-        <mat-card-content>
-          <div class="stat-content">
-            <mat-icon>pending</mat-icon>
-            <div class="stat-info">
-              <span class="stat-number">{{ getPendingCount() }}</span>
-              <span class="stat-label">Pendientes</span>
-            </div>
-          </div>
-        </mat-card-content>
-      </mat-card>
-
-      <mat-card class="stat-card approved">
-        <mat-card-content>
-          <div class="stat-content">
-            <mat-icon>check_circle</mat-icon>
-            <div class="stat-info">
-              <span class="stat-number">{{ getApprovedCount() }}</span>
-              <span class="stat-label">Aprobadas</span>
-            </div>
-          </div>
-        </mat-card-content>
-      </mat-card>
-
-      <mat-card class="stat-card revenue">
-        <mat-card-content>
-          <div class="stat-content">
-            <mat-icon>attach_money</mat-icon>
-            <div class="stat-info">
-              <span class="stat-number"
-                >${{ getTotalRevenue() | number : "1.0-0" }}</span
-              >
-              <span class="stat-label">Ingresos Proyectados</span>
-            </div>
-          </div>
-        </mat-card-content>
-      </mat-card>
-    </div>
-  </div>
-
-  <!-- Filtros y búsqueda -->
+  <!-- Tarjeta de filtros -->
   <mat-card class="filters-card">
     <mat-card-content>
       <div class="filters-row">
+        <!-- Búsqueda -->
         <mat-form-field appearance="outline" class="search-field">
           <mat-label>Buscar cotizaciones</mat-label>
           <input
             matInput
             placeholder="Cliente, email, producto..."
             [value]="searchTerm"
-            (input)="onSearchChange($event.target.value)"
+            (input)="onSearchChange($any($event.target).value)"
           />
           <mat-icon matSuffix>search</mat-icon>
         </mat-form-field>
 
+        <!-- Botones de filtro -->
         <div class="status-filters">
           <button
-            mat-button
-            [class.active]="statusFilter === 'all'"
+            mat-stroked-button
+            [color]="statusFilter === 'all' ? 'primary' : ''"
             (click)="onStatusFilterChange('all')"
           >
             Todas ({{ quotes.length }})
           </button>
-          <button
-            mat-button
-            [class.active]="statusFilter === 'pending'"
-            (click)="onStatusFilterChange('pending')"
-          >
-            Pendientes ({{ getPendingCount() }})
-          </button>
-          <button
-            mat-button
-            [class.active]="statusFilter === 'approved'"
-            (click)="onStatusFilterChange('approved')"
-          >
-            Aprobadas ({{ getApprovedCount() }})
-          </button>
-          <button
-            mat-button
-            [class.active]="statusFilter === 'completed'"
-            (click)="onStatusFilterChange('completed')"
-          >
-            Completadas ({{ getCompletedCount() }})
-          </button>
         </div>
-
-        <button
-          mat-raised-button
-          color="accent"
-          (click)="exportToCSV()"
-          [disabled]="quotes.length === 0"
-        >
-          <mat-icon>download</mat-icon>
-          Exportar CSV
-        </button>
       </div>
     </mat-card-content>
   </mat-card>
 
-  <!-- Tabla de cotizaciones -->
-  <mat-card *ngIf="!isLoading; else loadingTemplate">
+  <!-- Tabla -->
+  <mat-card *ngIf="!isLoading; else loadingTemplate" class="quotes-card">
     <mat-card-content>
       <div
         *ngIf="filteredQuotes.length > 0; else noQuotes"
         class="table-container"
       >
-        <table mat-table [dataSource]="filteredQuotes" class="quotes-table">
-          <!-- Columna ID -->
+        <table
+          mat-table
+          [dataSource]="filteredQuotes"
+          class="quotes-table mat-elevation-z2"
+        >
+          <!-- ID -->
           <ng-container matColumnDef="id">
             <th mat-header-cell *matHeaderCellDef>ID</th>
             <td mat-cell *matCellDef="let quote">
               <span class="quote-id">#{{ quote.id }}</span>
               <mat-chip
                 *ngIf="quote.isPublicQuote"
-                class="public-quote-chip"
+                color="accent"
+                selected
                 size="small"
+                >Pública</mat-chip
               >
-                Pública
-              </mat-chip>
             </td>
           </ng-container>
 
-          <!-- Columna Cliente -->
+          <!-- Cliente -->
           <ng-container matColumnDef="customer">
             <th mat-header-cell *matHeaderCellDef>Cliente</th>
             <td mat-cell *matCellDef="let quote">
@@ -144,7 +76,7 @@
             </td>
           </ng-container>
 
-          <!-- Columna Producto -->
+          <!-- Producto -->
           <ng-container matColumnDef="product">
             <th mat-header-cell *matHeaderCellDef>Producto</th>
             <td mat-cell *matCellDef="let quote">
@@ -155,15 +87,15 @@
             </td>
           </ng-container>
 
-          <!-- Columna Cantidad -->
+          <!-- Cantidad -->
           <ng-container matColumnDef="quantity">
             <th mat-header-cell *matHeaderCellDef>Cantidad</th>
-            <td mat-cell *matCellDef="let quote">
-              <span class="quantity">{{ quote.quantity }}</span>
+            <td mat-cell *matCellDef="let quote" class="quantity">
+              {{ quote.quantity }}
             </td>
           </ng-container>
 
-          <!-- Columna Pricing -->
+          <!-- Precios -->
           <ng-container matColumnDef="pricing">
             <th mat-header-cell *matHeaderCellDef>Precio</th>
             <td mat-cell *matCellDef="let quote">
@@ -178,7 +110,7 @@
             </td>
           </ng-container>
 
-          <!-- Columna Estado -->
+          <!-- Estado -->
           <ng-container matColumnDef="status">
             <th mat-header-cell *matHeaderCellDef>Estado</th>
             <td mat-cell *matCellDef="let quote">
@@ -188,7 +120,7 @@
             </td>
           </ng-container>
 
-          <!-- Columna Fechas -->
+          <!-- Fechas -->
           <ng-container matColumnDef="dates">
             <th mat-header-cell *matHeaderCellDef>Fechas</th>
             <td mat-cell *matCellDef="let quote">
@@ -197,102 +129,66 @@
                   >Solicitud:
                   {{ quote.requestDate | date : "dd/MM/yyyy" }}</small
                 >
-                <small *ngIf="quote.responseDate">
-                  Respuesta: {{ quote.responseDate | date : "dd/MM/yyyy" }}
-                </small>
-                <small *ngIf="quote.expiryDate" class="expiry-date">
-                  Expira: {{ quote.expiryDate | date : "dd/MM/yyyy" }}
-                </small>
+                <small *ngIf="quote.responseDate"
+                  >Respuesta:
+                  {{ quote.responseDate | date : "dd/MM/yyyy" }}</small
+                >
+                <small *ngIf="quote.expiryDate" class="expiry-date"
+                  >Expira: {{ quote.expiryDate | date : "dd/MM/yyyy" }}</small
+                >
               </div>
             </td>
           </ng-container>
 
-          <!-- Columna Acciones -->
+          <!-- Acciones -->
           <ng-container matColumnDef="actions">
             <th mat-header-cell *matHeaderCellDef>Acciones</th>
             <td mat-cell *matCellDef="let quote">
               <div class="actions-container">
-                <!-- Ver detalles -->
                 <button
-                  mat-icon-button
-                  color="primary"
-                  (click)="viewQuoteDetails(quote)"
-                  matTooltip="Ver detalles"
-                >
-                  <mat-icon>visibility</mat-icon>
-                </button>
-
-                <!-- Aprobar (solo para pendientes) -->
-                <button
-                  mat-icon-button
+                  mat-mini-fab
                   color="primary"
                   (click)="approveQuote(quote)"
                   *ngIf="canApprove(quote)"
-                  matTooltip="Aprobar cotización"
                 >
                   <mat-icon>check</mat-icon>
                 </button>
-
-                <!-- Rechazar (solo para pendientes) -->
                 <button
-                  mat-icon-button
+                  mat-mini-fab
                   color="warn"
                   (click)="rejectQuote(quote)"
                   *ngIf="canReject(quote)"
-                  matTooltip="Rechazar cotización"
                 >
                   <mat-icon>close</mat-icon>
                 </button>
-
-                <!-- Aprobar y crear usuario (solo para cotizaciones públicas pendientes) -->
                 <button
-                  mat-icon-button
+                  mat-mini-fab
                   color="accent"
                   (click)="approveAndCreateUser(quote)"
                   *ngIf="canCreateUser(quote)"
-                  matTooltip="Aprobar y crear usuario"
                 >
                   <mat-icon>person_add</mat-icon>
                 </button>
-
-                <!-- Menú adicional -->
-                <button
-                  mat-icon-button
-                  [matMenuTriggerFor]="actionsMenu"
-                  matTooltip="Más opciones"
+                <span
+                  *ngIf="
+                    !canApprove(quote) &&
+                    !canReject(quote) &&
+                    !canCreateUser(quote)
+                  "
+                  class="processed-message"
                 >
-                  <mat-icon>more_vert</mat-icon>
-                </button>
-                <mat-menu #actionsMenu="matMenu">
-                  <button mat-menu-item (click)="viewQuoteDetails(quote)">
-                    <mat-icon>visibility</mat-icon>
-                    <span>Ver Detalles</span>
-                  </button>
-
-                  <button
-                    mat-menu-item
-                    (click)="deleteQuote(quote)"
-                    class="delete-action"
-                  >
-                    <mat-icon>delete</mat-icon>
-                    <span>Eliminar</span>
-                  </button>
-                </mat-menu>
+                  {{ getStatusText(quote.status) }}
+                </span>
               </div>
             </td>
           </ng-container>
 
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-          <tr
-            mat-row
-            *matRowDef="let row; columns: displayedColumns"
-            [class]="'quote-row quote-' + getStatusKeyPublic(row.status)"
-            (click)="viewQuoteDetails(row)"
-          ></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
         </table>
       </div>
 
-      <!-- Estado sin cotizaciones -->
+      <!-- Sin cotizaciones -->
       <ng-template #noQuotes>
         <div class="no-quotes">
           <mat-icon>assignment</mat-icon>
@@ -316,15 +212,14 @@
             (click)="statusFilter = 'all'; searchTerm = ''; applyFilters()"
             *ngIf="searchTerm || statusFilter !== 'all'"
           >
-            <mat-icon>clear</mat-icon>
-            Limpiar Filtros
+            <mat-icon>clear</mat-icon> Limpiar Filtros
           </button>
         </div>
       </ng-template>
     </mat-card-content>
   </mat-card>
 
-  <!-- Template de loading -->
+  <!-- Loading -->
   <ng-template #loadingTemplate>
     <mat-card>
       <mat-card-content>

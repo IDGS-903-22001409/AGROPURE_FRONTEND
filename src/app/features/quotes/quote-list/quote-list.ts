@@ -71,6 +71,7 @@ export class QuoteListComponent implements OnInit {
     this.isLoading = true;
     this.quoteService.getQuotes().subscribe({
       next: (quotes) => {
+        console.log('Cotizaciones cargadas:', quotes);
         this.quotes = quotes;
         this.applyFilters();
         this.isLoading = false;
@@ -129,6 +130,7 @@ export class QuoteListComponent implements OnInit {
       case 'rejected':
         return 'warn';
       default:
+        console.warn('Estado desconocido:', status);
         return 'accent';
     }
   }
@@ -145,11 +147,16 @@ export class QuoteListComponent implements OnInit {
       case 'completed':
         return 'Completada';
       default:
-        return String(status);
+        console.warn('Estado de texto desconocido:', status);
+        return String(status) || 'Sin Estado';
     }
   }
 
   private getStatusKey(status: string | QuoteStatus): string {
+    if (!status) {
+      console.warn('Estado es null o undefined');
+      return 'pending'; // Estado por defecto
+    }
     return String(status).toLowerCase();
   }
 
@@ -158,13 +165,8 @@ export class QuoteListComponent implements OnInit {
     return this.getStatusKey(status);
   }
 
-  viewQuoteDetails(quote: Quote): void {
-    // Por ahora, solo mostrar información básica
-    console.log('Ver detalles de cotización:', quote);
-    this.notificationService.info(
-      `Ver detalles de cotización #${quote.id} - ${quote.customerName}`
-    );
-  }
+  // REMOVIDO: viewQuoteDetails() - No queremos mostrar detalles
+  // REMOVIDO: deleteQuote() - No queremos permitir eliminar
 
   approveQuote(quote: Quote): void {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
@@ -268,35 +270,6 @@ export class QuoteListComponent implements OnInit {
       });
   }
 
-  deleteQuote(quote: Quote): void {
-    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      data: {
-        title: 'Eliminar Cotización',
-        message: `¿Estás seguro de que deseas eliminar la cotización #${quote.id}? Esta acción no se puede deshacer.`,
-        confirmText: 'Eliminar',
-        type: 'danger',
-      },
-    });
-
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        this.quoteService.deleteQuote(quote.id).subscribe({
-          next: () => {
-            this.quotes = this.quotes.filter((q) => q.id !== quote.id);
-            this.applyFilters();
-            this.notificationService.success(
-              'Cotización eliminada exitosamente'
-            );
-          },
-          error: (error) => {
-            console.error('Error deleting quote:', error);
-            this.notificationService.error('Error eliminando la cotización');
-          },
-        });
-      }
-    });
-  }
-
   // Métodos para estadísticas
   getPendingCount(): number {
     return this.quotes.filter((q) => this.getStatusKey(q.status) === 'pending')
@@ -307,6 +280,11 @@ export class QuoteListComponent implements OnInit {
     return this.quotes.filter((q) =>
       ['approved', 'completed'].includes(this.getStatusKey(q.status))
     ).length;
+  }
+
+  getRejectedCount(): number {
+    return this.quotes.filter((q) => this.getStatusKey(q.status) === 'rejected')
+      .length;
   }
 
   getCompletedCount(): number {
@@ -389,5 +367,22 @@ export class QuoteListComponent implements OnInit {
 
   canCreateUser(quote: Quote): boolean {
     return this.getStatusKey(quote.status) === 'pending' && quote.isPublicQuote;
+  }
+
+  // Método de debug para verificar estados
+  debugQuoteStates(): void {
+    console.log('=== DEBUG: Estados de Cotizaciones ===');
+    this.quotes.forEach((quote, index) => {
+      console.log(`Cotización ${index + 1}:`, {
+        id: quote.id,
+        status: quote.status,
+        statusType: typeof quote.status,
+        statusKey: this.getStatusKey(quote.status),
+        statusText: this.getStatusText(quote.status),
+        canApprove: this.canApprove(quote),
+        canReject: this.canReject(quote),
+        canCreateUser: this.canCreateUser(quote),
+      });
+    });
   }
 }
