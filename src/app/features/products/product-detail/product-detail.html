@@ -1,3 +1,4 @@
+<!-- src/app/features/products/product-detail/product-detail.html - ACTUALIZADO -->
 <div class="product-detail-container" *ngIf="product">
   <div class="breadcrumb">
     <a routerLink="/products">Productos</a>
@@ -13,6 +14,15 @@
     <div class="product-info">
       <h1>{{ product.name }}</h1>
       <p class="product-description">{{ product.description }}</p>
+
+      <!-- Información de rating y reseñas -->
+      <div class="rating-summary" *ngIf="getReviewCount() > 0">
+        <app-rating-display [rating]="getAverageRating()" [showValue]="true">
+        </app-rating-display>
+        <span class="review-count">
+          ({{ getReviewCount() }} reseña{{ getReviewCount() !== 1 ? "s" : "" }})
+        </span>
+      </div>
 
       <div class="price-info">
         <span class="price-label">Precio desde:</span>
@@ -126,7 +136,7 @@
       </mat-card-content>
     </mat-card>
 
-    <!-- Nueva sección de FAQ -->
+    <!-- Sección de FAQ -->
     <mat-card>
       <mat-card-header>
         <mat-card-title>Preguntas Frecuentes</mat-card-title>
@@ -152,23 +162,89 @@
       </mat-card-content>
     </mat-card>
 
-    <mat-card *ngIf="reviews.length > 0">
+    <!-- Sección de Reseñas ACTUALIZADA -->
+    <mat-card>
       <mat-card-header>
-        <mat-card-title>Reseñas de Clientes</mat-card-title>
-        <mat-card-subtitle>{{ reviews.length }} reseña(s)</mat-card-subtitle>
+        <div class="reviews-header">
+          <div class="reviews-title">
+            <mat-card-title>Reseñas de Clientes</mat-card-title>
+            <mat-card-subtitle *ngIf="reviews.length > 0">
+              {{ reviews.length }} reseña{{ reviews.length !== 1 ? "s" : "" }}
+              <span *ngIf="getAverageRating() > 0">
+                • Promedio: {{ getAverageRating() }}/5 estrellas
+              </span>
+            </mat-card-subtitle>
+            <mat-card-subtitle *ngIf="reviews.length === 0">
+              Sé el primero en escribir una reseña
+            </mat-card-subtitle>
+          </div>
+
+          <!-- Botón para escribir reseña -->
+          <div class="review-action" *ngIf="currentUser$ | async">
+            <button
+              mat-raised-button
+              color="accent"
+              [disabled]="!canWriteReview || showReviewForm"
+              (click)="showReviewFormHandler()"
+              *ngIf="!showReviewForm"
+            >
+              <mat-icon>rate_review</mat-icon>
+              {{ getUserReviewStatus() }}
+            </button>
+          </div>
+
+          <!-- Botón para usuarios no autenticados -->
+          <div class="review-action" *ngIf="!(currentUser$ | async)">
+            <button mat-stroked-button routerLink="/login">
+              <mat-icon>login</mat-icon>
+              Inicia sesión para escribir una reseña
+            </button>
+          </div>
+        </div>
       </mat-card-header>
+
       <mat-card-content>
-        <div class="reviews-list">
+        <!-- Formulario de reseña -->
+        <app-review-form
+          [productId]="product.id"
+          [showForm]="showReviewForm"
+          (reviewSubmitted)="onReviewSubmitted()"
+          (formCancelled)="onReviewFormCancelled()"
+        >
+        </app-review-form>
+
+        <!-- Lista de reseñas existentes -->
+        <div class="reviews-list" *ngIf="reviews.length > 0">
           <div class="review-item" *ngFor="let review of reviews">
             <div class="review-header">
-              <strong>{{ review.userName }}</strong>
-              <app-rating-display [rating]="review.rating"></app-rating-display>
+              <div class="reviewer-info">
+                <mat-icon class="avatar-icon">account_circle</mat-icon>
+                <strong>{{ review.userName }}</strong>
+              </div>
+              <div class="review-rating">
+                <app-rating-display
+                  [rating]="review.rating"
+                ></app-rating-display>
+              </div>
             </div>
             <p class="review-comment">{{ review.comment }}</p>
-            <small class="review-date">{{
-              review.createdAt | date : "dd/MM/yyyy"
-            }}</small>
+            <div class="review-meta">
+              <small class="review-date">
+                <mat-icon>schedule</mat-icon>
+                {{ review.createdAt | date : "dd/MM/yyyy" }}
+              </small>
+            </div>
           </div>
+        </div>
+
+        <!-- Estado sin reseñas -->
+        <div class="no-reviews" *ngIf="reviews.length === 0 && !showReviewForm">
+          <mat-icon>reviews</mat-icon>
+          <h3>Sin reseñas aún</h3>
+          <p>
+            ¿Has usado este producto? Comparte tu experiencia con otros
+            clientes.
+          </p>
         </div>
       </mat-card-content>
     </mat-card>

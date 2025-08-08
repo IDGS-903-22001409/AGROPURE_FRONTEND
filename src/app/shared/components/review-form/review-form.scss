@@ -1,0 +1,106 @@
+/* src/app/shared/components/review-form/review-form.scss */
+.review-form-card {
+  margin: 24px 0;
+  border-left: 4px solid #4caf50;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  
+  &:hover {
+    box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+    transition: box-shadow 0.2s ease;
+  }
+}
+
+mat-card-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #2e7d32;
+  font-weight: 600;
+}
+
+mat-card-subtitle {
+  color: #666;
+  margin-top: 4px;
+}
+
+.full-width {
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.rating-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 4px 0;
+}
+
+.stars {
+  font-size: 16px;
+  min-width: 80px;
+}
+
+.form-actions {
+  display: flex;
+  gap: 16px;
+  justify-content: flex-end;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #e0e0e0;
+
+  @media (max-width: 600px) {
+    flex-direction: column-reverse;
+    gap: 12px;
+  }
+}
+
+// Estilos para el textarea
+.mat-mdc-form-field-appearance-outline {
+  &.mat-focused {
+    .mat-mdc-form-field-outline-thick {
+      border-color: #4caf50 !important;
+    }
+    
+    .mat-mdc-form-field-label {
+      color: #4caf50 !important;
+    }
+  }
+}
+
+// Animación de entrada
+.review-form-card {
+  animation: slideInDown 0.3s ease-out;
+}
+
+@keyframes slideInDown {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+// Estado de carga
+.form-actions button[disabled] {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+// Mejoras para el select de rating
+.mat-mdc-select-panel {
+  .mat-mdc-option {
+    padding: 12px 16px !important;
+    
+    &:hover {
+      background-color: #f5f5f5 !important;
+    }
+    
+    &.mat-mdc-option-active {
+      background-color: #e8f5e8 !important;
+      color: #2e7d32 !important;
+    }
+  }
+}

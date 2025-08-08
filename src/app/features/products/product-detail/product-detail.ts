@@ -9,9 +9,13 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { ProductService } from '../../../core/services/product';
 import { ReviewService } from '../../../core/services/review';
+import { AuthService } from '../../../core/services/auth';
 import { Product } from '../../../core/models/product';
 import { Review } from '../../../core/models/review';
+import { User } from '../../../core/models/user';
 import { RatingDisplayComponent } from '../../../shared/components/rating-display/rating-display';
+import { ReviewFormComponent } from '../../../shared/components/review-form/review-form';
+import { Observable } from 'rxjs';
 
 interface FAQ {
   question: string;
@@ -31,6 +35,7 @@ interface FAQ {
     MatDividerModule,
     MatExpansionModule,
     RatingDisplayComponent,
+    ReviewFormComponent,
   ],
   templateUrl: './product-detail.html',
   styleUrls: ['./product-detail.scss'],
@@ -39,6 +44,12 @@ export class ProductDetailComponent implements OnInit {
   product: Product | null = null;
   reviews: Review[] = [];
   productFAQs: FAQ[] = [];
+  currentUser$: Observable<User | null>;
+
+  // Estados para el formulario de reseñas
+  showReviewForm = false;
+  canWriteReview = false;
+  hasExistingReview = false;
 
   // FAQ estáticas por defecto para sistemas de tratamiento de agua
   private defaultFAQs: FAQ[] = [
@@ -128,14 +139,18 @@ export class ProductDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private productService: ProductService,
-    private reviewService: ReviewService
-  ) {}
+    private reviewService: ReviewService,
+    private authService: AuthService
+  ) {
+    this.currentUser$ = this.authService.currentUser$;
+  }
 
   ngOnInit(): void {
     const productId = Number(this.route.snapshot.params['id']);
     if (productId) {
       this.loadProduct(productId);
       this.loadReviews(productId);
+      this.checkReviewEligibility(productId);
     } else {
       this.router.navigate(['/products']);
     }
@@ -160,6 +175,35 @@ export class ProductDetailComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error loading reviews:', error);
+      },
+    });
+  }
+
+  private checkReviewEligibility(productId: number): void {
+    const currentUser = this.authService.getCurrentUser();
+    if (!currentUser) {
+      this.canWriteReview = false;
+      return;
+    }
+
+    // Verificar si el usuario ya tiene una reseña para este producto
+    this.reviewService.getProductReviews(productId).subscribe({
+      next: (allReviews) => {
+        // Revisar si ya existe una reseña de este usuario (incluso no aprobada)
+        this.hasExistingReview = allReviews.some(
+          (review) =>
+            review.userName ===
+            `${currentUser.firstName} ${currentUser.lastName}`
+        );
+
+        // El usuario puede escribir una reseña si:
+        // 1. Está autenticado
+        // 2. No tiene una reseña existente
+        // 3. Es un cliente (los admins pueden escribir reseñas también)
+        this.canWriteReview = !this.hasExistingReview;
+      },
+      error: () => {
+        this.canWriteReview = false;
       },
     });
   }
@@ -209,5 +253,53 @@ export class ProductDetailComponent implements OnInit {
         )} incluye el equipo y configuración básica. La instalación, capacitación y puesta en marcha se cotizan por separado según las condiciones específicas del sitio.`,
       });
     }
+  }
+
+  // Métodos para manejar las reseñas
+  showReviewFormHandler(): void {
+    const currentUser = this.authService.getCurrentUser();
+    if (!currentUser) {
+      // Redirigir al login si no está autenticado
+      this.router.navigate(['/login']);
+      return;
+    }
+
+    this.showReviewForm = true;
+  }
+
+  onReviewSubmitted(): void {
+    // Recargar las reseñas y ocultar el formulario
+    if (this.product) {
+      this.loadReviews(this.product.id);
+      this.checkReviewEligibility(this.product.id);
+    }
+    this.showReviewForm = false;
+  }
+
+  onReviewFormCancelled(): void {
+    this.showReviewForm = false;
+  }
+
+  getUserReviewStatus(): string {
+    const currentUser = this.authService.getCurrentUser();
+    if (!currentUser) {
+      return 'Inicia sesión para escribir una reseña';
+    }
+
+    if (this.hasExistingReview) {
+      return 'Ya has escrito una reseña para este producto';
+    }
+
+    return 'Escribe una reseña';
+  }
+
+  getReviewCount(): number {
+    return this.reviews.length;
+  }
+
+  getAverageRating(): number {
+    if (this.reviews.length === 0) return 0;
+    const sum = this.reviews.reduce((acc, review) => acc + review.rating, 0);
+    return Math.round((sum / this.reviews.length) * 10) / 10;
   }
 }
