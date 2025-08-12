@@ -165,9 +165,6 @@ export class QuoteListComponent implements OnInit {
     return this.getStatusKey(status);
   }
 
-  // REMOVIDO: viewQuoteDetails() - No queremos mostrar detalles
-  // REMOVIDO: deleteQuote() - No queremos permitir eliminar
-
   approveQuote(quote: Quote): void {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       data: {
