@@ -108,7 +108,41 @@ export const routes: Routes = [
             (m) => m.QuoteListComponent
           ),
       },
-      // 🔥 AGREGAR ESTA LÍNEA:
+      {
+        path: 'suppliers',
+        loadComponent: () =>
+          import('./features/admin/supplier-list/supplier-list').then(
+            (m) => m.SupplierListComponent
+          ),
+      },
+      {
+        path: 'materials',
+        loadComponent: () =>
+          import('./features/admin/material-list/material-list').then(
+            (m) => m.MaterialListComponent
+          ),
+      },
+      {
+        path: 'reviews',
+        loadComponent: () =>
+          import('./features/admin/review-list/review-list').then(
+            (m) => m.ReviewListComponent
+          ),
+      },
+      {
+        path: 'inventory',
+        loadComponent: () =>
+          import('./features/admin/inventory/inventory').then(
+            (m) => m.InventoryComponent
+          ),
+      },
+      {
+        path: 'purchases',
+        loadComponent: () =>
+          import('./features/admin/purchase-list/purchase-list').then(
+            (m) => m.PurchaseListComponent
+          ),
+      },
       {
         path: 'sales',
         loadComponent: () =>
@@ -117,13 +151,12 @@ export const routes: Routes = [
           ),
       },
       {
-        path: 'suppliers',
+        path: 'products',
         loadComponent: () =>
-          import('./features/admin/supplier-list/supplier-list').then(
-            (m) => m.SupplierListComponent
+          import('./features/admin/product-list/product-list').then(
+            (m) => m.AdminProductListComponent
           ),
       },
-      // ... resto de rutas admin
     ],
   },
   {

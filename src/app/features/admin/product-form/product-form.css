@@ -1,0 +1,88 @@
+.product-form { 
+  min-width: 600px; 
+}
+
+.full-width { 
+  width: 100%; 
+  margin-bottom: 16px; 
+}
+
+.form-row { 
+  display: flex; 
+  gap: 16px; 
+  margin-bottom: 16px; 
+}
+
+.half-width { 
+  flex: 1; 
+}
+
+.materials-section { 
+  margin: 16px 0; 
+}
+
+.material-row { 
+  display: flex; 
+  gap: 16px; 
+  align-items: center; 
+  margin-bottom: 16px; 
+}
+
+.material-select { 
+  flex: 2; 
+}
+
+.quantity-field { 
+  flex: 1; 
+}
+
+.add-material-btn { 
+  margin: 16px 0; 
+}
+
+.cost-calculation { 
+  background: #e8f5e8; 
+  padding: 16px; 
+  border-radius: 8px; 
+  margin-top: 16px; 
+}
+
+.cost-row { 
+  display: flex; 
+  justify-content: space-between; 
+  margin-bottom: 8px; 
+}
+
+.cost-row.total { 
+  border-top: 1px solid #ccc; 
+  padding-top: 8px; 
+  margin-top: 8px; 
+}
+
+.cost-value { 
+  color: #2e7d32; 
+  font-weight: 500; 
+}
+
+mat-dialog-actions { 
+  justify-content: flex-end; 
+  gap: 12px; 
+}
+
+/* Media queries para responsividad */
+@media (max-width: 600px) {
+  .form-row { 
+    flex-direction: column; 
+    gap: 0; 
+  }
+  
+  .material-row { 
+    flex-direction: column; 
+    align-items: stretch; 
+  }
+
+  .product-form {
+    min-width: unset;
+    width: 100%;
+  }
+}
