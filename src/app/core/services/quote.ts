@@ -96,20 +96,44 @@ export class QuoteService {
     status: QuoteStatus,
     adminNotes?: string
   ): Observable<Quote> {
-    return this.apiService
-      .put<Quote>(`quotes/${id}/status`, {
-        status,
-        adminNotes,
+    // Convertir el enum a número como espera el backend
+    let statusNumber: number;
+    switch (status) {
+      case QuoteStatus.Pending:
+        statusNumber = 0;
+        break;
+      case QuoteStatus.Approved:
+        statusNumber = 1;
+        break;
+      case QuoteStatus.Rejected:
+        statusNumber = 2;
+        break;
+      case QuoteStatus.Completed:
+        statusNumber = 3;
+        break;
+      default:
+        statusNumber = 0;
+    }
+
+    const updateDto = {
+      status: statusNumber,
+      adminNotes: adminNotes || null,
+    };
+
+    console.log('QuoteService.updateQuoteStatus - Enviando:', {
+      url: `quotes/${id}/status`,
+      payload: updateDto,
+    });
+
+    return this.apiService.put<Quote>(`quotes/${id}/status`, updateDto).pipe(
+      tap((response) =>
+        console.log('QuoteService.updateQuoteStatus response:', response)
+      ),
+      catchError((error) => {
+        console.error('QuoteService.updateQuoteStatus error:', error);
+        return throwError(error);
       })
-      .pipe(
-        tap((response) =>
-          console.log('QuoteService.updateQuoteStatus response:', response)
-        ),
-        catchError((error) => {
-          console.error('QuoteService.updateQuoteStatus error:', error);
-          return throwError(error);
-        })
-      );
+    );
   }
 
   approveAndCreateUser(id: number): Observable<void> {
