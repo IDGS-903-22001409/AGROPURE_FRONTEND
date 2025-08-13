@@ -6,14 +6,19 @@ export interface Product {
   name: string;
   description: string;
   detailedDescription?: string;
-  basePrice: number;
   imageUrl?: string;
-  materials: ProductMaterial[];
-  faqs: ProductFaq[];
-  reviews: Review[];
-  averageRating: number;
+  basePrice: number;
+  category?: string;
+  technicalSpecs?: string;
   isActive: boolean;
   createdAt: Date;
+
+  // AGREGAR ESTA LÍNEA:
+  manualContent?: string; // Contenido HTML del manual
+
+  materials: ProductMaterial[];
+  reviews: Review[];
+  averageRating: number;
 }
 
 export interface ProductMaterial {

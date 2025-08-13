@@ -43,6 +43,16 @@
           <mat-icon>arrow_back</mat-icon>
           Volver al Catálogo
         </button>
+
+        <button
+          mat-stroked-button
+          color="primary"
+          (click)="toggleManual()"
+          *ngIf="hasManual()"
+        >
+          <mat-icon>description</mat-icon>
+          {{ showManual ? "Ocultar Manual" : "Ver Manual" }}
+        </button>
       </div>
     </div>
   </div>
@@ -249,6 +259,21 @@
       </mat-card-content>
     </mat-card>
   </div>
+
+  <mat-card *ngIf="showManual && hasManual()">
+    <mat-card-header>
+      <mat-card-title>
+        <mat-icon>description</mat-icon>
+        Manual del Producto
+      </mat-card-title>
+      <mat-card-subtitle>
+        Guía completa de instalación y uso
+      </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="manual-content" [innerHTML]="getManualContent()"></div>
+    </mat-card-content>
+  </mat-card>
 </div>
 
 <div class="loading-container" *ngIf="!product">

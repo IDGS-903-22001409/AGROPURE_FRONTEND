@@ -51,6 +51,7 @@ export class ProductDetailComponent implements OnInit {
   canWriteReview = false;
   hasExistingReview = false;
 
+  showManual = false;
   // FAQ estáticas por defecto para sistemas de tratamiento de agua
   private defaultFAQs: FAQ[] = [
     {
@@ -301,5 +302,183 @@ export class ProductDetailComponent implements OnInit {
     if (this.reviews.length === 0) return 0;
     const sum = this.reviews.reduce((acc, review) => acc + review.rating, 0);
     return Math.round((sum / this.reviews.length) * 10) / 10;
+  }
+
+  // AGREGAR ESTOS MÉTODOS:
+  // AGREGAR ESTOS MÉTODOS AL FINAL:
+  toggleManual(): void {
+    this.showManual = !this.showManual;
+  }
+
+  hasManual(): boolean {
+    return this.product?.id ? true : false; // Todos los productos tienen manual
+  }
+
+  getManualContent(): string {
+    if (!this.product) return '';
+
+    const manuals: { [key: number]: string } = {
+      1: `
+        <h1>Manual AGROPURIFI Sistema Básico</h1>
+        
+        <h2>1. Contenido del Paquete</h2>
+        <ul>
+            <li>1 Sensor de pH digital</li>
+            <li>1 Sensor de turbidez</li>
+            <li>1 Microcontrolador ESP32</li>
+            <li>1 Carcasa impermeable IP67</li>
+            <li>Cables y conectores</li>
+            <li>Manual de instalación</li>
+        </ul>
+        
+        <h2>2. Instalación</h2>
+        <div class='step'>
+            <strong>Paso 1:</strong> Ubique un punto de instalación cerca del sistema de riego, con acceso a alimentación eléctrica.
+        </div>
+        <div class='step'>
+            <strong>Paso 2:</strong> Monte la carcasa en una superficie estable, alejada de la exposición directa al sol.
+        </div>
+        <div class='step'>
+            <strong>Paso 3:</strong> Conecte los sensores siguiendo el diagrama de conexiones incluido.
+        </div>
+        
+        <h2>3. Configuración WiFi</h2>
+        <p>Para conectar el sistema a su red WiFi:</p>
+        <ol>
+            <li>Presione el botón de configuración por 5 segundos</li>
+            <li>Conecte su móvil a la red 'AGROPURE-Setup'</li>
+            <li>Abra el navegador y vaya a 192.168.4.1</li>
+            <li>Seleccione su red WiFi e ingrese la contraseña</li>
+        </ol>
+        
+        <div class='warning'>
+            Asegúrese de que la señal WiFi sea estable en el punto de instalación antes de proceder.
+        </div>
+        
+        <h2>4. Mantenimiento</h2>
+        <div class='tip'>
+            Limpie los sensores cada 15 días con agua destilada para mantener la precisión.
+        </div>
+        
+        <h2>5. Solución de Problemas</h2>
+        <table>
+            <tr><th>Problema</th><th>Solución</th></tr>
+            <tr><td>Sin conectividad WiFi</td><td>Verificar contraseña y distancia al router</td></tr>
+            <tr><td>Lecturas incorrectas</td><td>Limpiar sensores y recalibrar</td></tr>
+            <tr><td>Sin alimentación</td><td>Revisar conexiones y fuente de poder</td></tr>
+        </table>
+      `,
+
+      2: `
+        <h1>Manual AGROPURIFI Sistema Avanzado</h1>
+        
+        <h2>1. Contenido del Paquete</h2>
+        <ul>
+            <li>2 Sensores de pH digitales</li>
+            <li>2 Sensores de turbidez</li>
+            <li>1 Microcontrolador ESP32</li>
+            <li>2 Válvulas solenoides</li>
+            <li>1 Sistema de filtración integrado</li>
+            <li>1 Carcasa impermeable IP67</li>
+            <li>Kit completo de cables y conectores</li>
+        </ul>
+        
+        <h2>2. Instalación Avanzada</h2>
+        <div class='warning'>
+            Este sistema requiere instalación por personal técnico capacitado.
+        </div>
+        
+        <div class='step'>
+            <strong>Paso 1:</strong> Planifique la instalación considerando múltiples puntos de monitoreo.
+        </div>
+        <div class='step'>
+            <strong>Paso 2:</strong> Instale las válvulas en línea con el sistema de riego principal.
+        </div>
+        <div class='step'>
+            <strong>Paso 3:</strong> Configure los sensores en diferentes zonas de cultivo.
+        </div>
+        
+        <h2>3. Configuración de Zonas</h2>
+        <p>El sistema avanzado permite configurar hasta 4 zonas independientes:</p>
+        <ol>
+            <li>Acceda al panel de configuración web</li>
+            <li>Defina parámetros por zona de cultivo</li>
+            <li>Configure horarios de riego automático</li>
+            <li>Establezca límites de alarma por zona</li>
+        </ol>
+        
+        <div class='tip'>
+            Configure alertas por WhatsApp y email para monitoreo 24/7.
+        </div>
+        
+        <h2>4. Análisis Predictivo</h2>
+        <p>El sistema incluye algoritmos de machine learning que:</p>
+        <ul>
+            <li>Predicen necesidades de riego</li>
+            <li>Optimizan el uso de químicos</li>
+            <li>Detectan patrones anómalos</li>
+            <li>Generan reportes automáticos</li>
+        </ul>
+      `,
+
+      3: `
+        <h1>Manual AGROPURIFI Sensor pH Individual</h1>
+        
+        <h2>1. Características Técnicas</h2>
+        <table>
+            <tr><th>Parámetro</th><th>Especificación</th></tr>
+            <tr><td>Rango de medición</td><td>0-14 pH</td></tr>
+            <tr><td>Precisión</td><td>±0.1 pH</td></tr>
+            <tr><td>Temperatura de operación</td><td>0-60°C</td></tr>
+            <tr><td>Comunicación</td><td>Digital I2C</td></tr>
+            <tr><td>Alimentación</td><td>3.3V - 5V DC</td></tr>
+        </table>
+        
+        <h2>2. Instalación</h2>
+        <div class='step'>
+            <strong>Paso 1:</strong> Conecte el sensor siguiendo el diagrama de pines.
+        </div>
+        <div class='step'>
+            <strong>Paso 2:</strong> Sumerja la sonda en la solución a medir.
+        </div>
+        <div class='step'>
+            <strong>Paso 3:</strong> Espere 30 segundos para estabilización.
+        </div>
+        
+        <h2>3. Calibración</h2>
+        <p>Para obtener mediciones precisas:</p>
+        <ol>
+            <li>Use soluciones buffer pH 4.0, 7.0 y 10.0</li>
+            <li>Limpie la sonda entre cada calibración</li>
+            <li>Guarde los valores de calibración</li>
+        </ol>
+        
+        <div class='warning'>
+            No permita que la sonda se seque completamente.
+        </div>
+        
+        <h2>4. Mantenimiento</h2>
+        <div class='tip'>
+            Almacene la sonda en solución KCl 3M cuando no esté en uso.
+        </div>
+        
+        <ul>
+            <li>Limpieza semanal con agua destilada</li>
+            <li>Calibración mensual</li>
+            <li>Reemplazo anual de la sonda</li>
+        </ul>
+      `,
+    };
+
+    return (
+      manuals[this.product.id] ||
+      `
+      <h1>Manual del Producto</h1>
+      <p>Manual no disponible para este producto.</p>
+      <div class='tip'>
+        Contáctenos para obtener información específica sobre este producto.
+      </div>
+    `
+    );
   }
 }
